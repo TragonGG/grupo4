@@ -1,48 +1,37 @@
 package juego;
-
-
 import java.awt.Color;
-
 import entorno.Entorno;
 import entorno.InterfaceJuego;
-
-public class Juego extends InterfaceJuego
-{
-	// El objeto Entorno que controla el tiempo y otros
-	private Entorno entorno;
+public class Juego extends InterfaceJuego {
 	
-	// Variables y métodos propios de cada grupo
-	// ...
-	
-	Juego()
-	{
-		// Inicializa el objeto entorno
-		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
-		
-		// Inicializar lo que haga falta para el juego
-		// ...
-
-		// Inicia el juego!
-		this.entorno.iniciar();
-	}
-
-	/**
-	 * Durante el juego, el método tick() será ejecutado en cada instante y 
-	 * por lo tanto es el método más importante de esta clase. Aquí se debe 
-	 * actualizar el estado interno del juego para simular el paso del tiempo 
-	 * (ver el enunciado del TP para mayor detalle).
-	 */
-	public void tick()
-	{
-		// Procesamiento de un instante de tiempo
-		// ...
-		
-	}
-	
-
-	@SuppressWarnings("unused")
-	public static void main(String[] args)
-	{
-		Juego juego = new Juego();
-	}
+    private Entorno entorno;
+    private Mago mago; // Instancia de Mago
+    
+    Juego() {
+        this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
+        this.mago = new Mago(400, 300); // Inicializa el mago en el centro de la ventana
+        this.entorno.iniciar();
+    }
+    public void tick() {
+        // Procesamiento de un instante de tiempo
+        entorno.colorFondo(Color.DARK_GRAY); // Cambia el color de fondo
+        mago.dibujar(entorno); // Dibuja el mago en cada tick
+        // Verificar teclas presionadas para mover el mago
+        if (entorno.estaPresionada('W')) { // Tecla W para mover arriba
+            mago.moverArriba();
+        }
+        if (entorno.estaPresionada('S')) { // Tecla S para mover abajo
+            mago.moverAbajo();
+        }
+        if (entorno.estaPresionada('A')) { // Tecla A para mover izquierda
+            mago.moverIzquierda();
+        }
+        if (entorno.estaPresionada('D')) { // Tecla D para mover derecha
+            mago.moverDerecha();
+        }
+    }
+    @SuppressWarnings("unused")
+    public static void main(String[] args) {
+        Juego juego = new Juego();
+    }
 }
