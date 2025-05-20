@@ -23,7 +23,7 @@ public class Mago {
     }
 
     public void dibujar(Entorno entorno) {
-        double escalaFinal = mirandoDerecha ? -escala : escala;
+        double escalaFinal = mirandoDerecha ? 	-escala  : escala;
         entorno.dibujarImagen(imagen, x, y, 0, escalaFinal);
         
     }
