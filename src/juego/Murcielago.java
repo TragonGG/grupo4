@@ -21,23 +21,19 @@ public class Murcielago {
 		        case 0: // Arriba
 		            this.x = Math.random() * 900;
 		            this.y = 0;
-		            System.out.println("arriba");
 		            break;
 		        case 1: // Abajo
 		            this.x = Math.random() * 900;
 		            this.y = 780;
-		            System.out.println("abajo");
 		            break;
 		        case 2: // Izquierda
 		            this.x = 0;
 		            this.y = Math.random() * 780;
-		            System.out.println("izquierda");
 		            break;
 		        case 3: // Derecha
 		            this.x = 900;
 		            this.y = Math.random() * 800;
-		            System.out.println("DERECHA");
-		            break;
+  		            break;
 		    }
 
 		    this.escala = 0.3;

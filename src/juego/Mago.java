@@ -11,7 +11,6 @@ public class Mago {
     private double velocidad;
     private double escala;
 
-
     public Mago(double x, double y) {
         this.x = x;
         this.y = y;
@@ -51,35 +50,26 @@ public class Mago {
     	}
     }
 
-    public void dibujar(Entorno entorno) {
-        boolean presionoTecla = false;
-
-        if (entorno.estaPresionada('W')) {
-            this.moverArriba();
-            entorno.dibujarImagen(imagen[2], x, y, 0, escala);
-            presionoTecla = true;
-        }
-        if (entorno.estaPresionada('S')) {
-            this.moverAbajo();
-            entorno.dibujarImagen(imagen[3], x, y, 0, escala);
-            presionoTecla = true;
-        }
-        if (entorno.estaPresionada('A')) {
-            this.moverIzquierda();
-            entorno.dibujarImagen(imagen[0], x, y, 0, escala); // Imagen mirando izquierda
-            presionoTecla = true;
-        }
-        if (entorno.estaPresionada('D')) {
-            this.moverDerecha();
-            entorno.dibujarImagen(imagen[1], x, y, 0, escala); // Imagen mirando derecha
-            presionoTecla = true;
-        }
-
-        if (!presionoTecla) {
-            // Reposo: imagen mirando a la izquierda
-            entorno.dibujarImagen(imagen[0], x, y, 0, escala);
-        }
-    }
+    public void dibujar(Entorno entorno, String direc) {
+    	
+    	if(direc.equals("abajo")){
+    		entorno.dibujarImagen(imagen[3], x, y, 0, escala);
+    		
+    	}
+    	else if(direc.equals("arriba")){
+    		entorno.dibujarImagen(imagen[2], x, y, 0, escala);
+    	}
+    	else if(direc.equals("derecha")){
+    		entorno.dibujarImagen(imagen[1], x, y, 0, escala);
+    	}
+    	else if(direc.equals("izquierda")){
+    		entorno.dibujarImagen(imagen[0], x, y, 0, escala);
+    	}
+    	else {
+    		entorno.dibujarImagen(imagen[1], x, y, 0, escala);
+    	}
+    }  
+    
    
     public double getX() {
 			return x;

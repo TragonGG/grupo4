@@ -30,13 +30,31 @@ public class Juego extends InterfaceJuego {
         
     	
     	
+    	mago.dibujar(entorno, "derecha");
+    	 // Dibuja el mago en cada tick
+    	if (entorno.estaPresionada('W')) { // Tecla W para mover arriba
+            mago.moverArriba();
+            mago.dibujar(entorno, "arriba");
+            
+    		}
+    	if (entorno.estaPresionada('S')) { // Tecla S para mover abajo
+            mago.moverAbajo();
+            mago.dibujar(entorno, "abajo" );
+    		}
+    	if (entorno.estaPresionada('A')) { // Tecla A para mover izquierda
+            mago.moverIzquierda();
+            mago.dibujar(entorno, "izquierda");
+    		}
+    	if (entorno.estaPresionada('D')) { // Tecla D para mover derecha
+            mago.moverDerecha();
+            mago.dibujar(entorno, "derecha");
+    	}
     	
-    	mago.dibujar(entorno); // Dibuja el mago en cada tick
-    	
-    	murcielago.dibujar(entorno);
-    	murcielago.mover(mago);
-        // Verificar teclas presionadas para mover el mago
-}
+  
+    	murcielago.dibujar(entorno); // Dibuja el murcielago
+    	murcielago.mover(mago); // Mueve al murcielago
+
+		}	
  
     @SuppressWarnings("unused")
     public static void main(String[] args) {
