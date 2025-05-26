@@ -6,11 +6,10 @@ import entorno.Entorno;
 
 public class Mago {
     private Image[] imagen;
-    private double x;
-    private double y;
-    private double velocidad;
-    private double escala;
+    private double x, y, velocidad, escala, alto, ancho;
+    public double bordIz, bordSup, bordDer, bordInf;
     private String direccionActual; // Estado que representa la dirección actual del mago
+
 
     public Mago(double x, double y) {
         this.x = x;
@@ -25,34 +24,33 @@ public class Mago {
         this.imagen[2] = Herramientas.cargarImagen("juego/img/magoW-V1.gif");
         this.imagen[3] = Herramientas.cargarImagen("juego/img/magoS-V1.gif");
         this.imagen[4] = Herramientas.cargarImagen("juego/img/magoBomba-V1.gif");
+        
+        this.alto = this.imagen[1].getHeight(null) * this.escala;
+        this.ancho = this.imagen[1].getWidth(null) * this.escala;
     } 
 
     public void moverIzquierda() {
-        if (this.x > 10) {
-            this.x -= velocidad;
-        }
+        this.x -= velocidad;
         this.direccionActual = "izquierda";
+        this.bordIz = this.x - (this.ancho / 2);
     }
-
+    
     public void moverDerecha() {
-        if (this.x < 895) {
-            this.x += velocidad;
-        }
+        this.x += velocidad;
         this.direccionActual = "derecha";
+        this.bordDer = x + this.ancho / 2;
     }
 
     public void moverArriba() {
-        if (this.y > 15) {
-            this.y -= velocidad;
-        }
+        this.y -= velocidad;
         this.direccionActual = "arriba";
+        this.bordSup = y - this.alto / 2;
     }
 
     public void moverAbajo() {
-        if (this.y < 760) {
-            this.y += velocidad;
-        }
+        this.y += velocidad;
         this.direccionActual = "abajo";
+        this.bordInf = y + this.alto / 2;
     }
 
     // Getter para obtener la dirección actual
@@ -64,6 +62,7 @@ public class Mago {
     public void setDireccionActual(String direccion) {
         this.direccionActual = direccion;
     }
+    
 
     public void dibujar(Entorno entorno) {
         // Ahora solo usamos la dirección actual almacenada en el objeto
