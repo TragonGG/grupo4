@@ -6,7 +6,7 @@ import entorno.Entorno;
 
 public class Mago {
     private Image[] imagen;
-    private double x, y, velocidad, escala, alto, ancho;
+    public double x, y, velocidad, escala, alto, ancho;
     public double bordIz, bordSup, bordDer, bordInf;
     private String direccionActual; // Estado que representa la dirección actual del mago
 
@@ -27,30 +27,45 @@ public class Mago {
         
         this.alto = this.imagen[1].getHeight(null) * this.escala;
         this.ancho = this.imagen[1].getWidth(null) * this.escala;
+        
+        this.bordIz = this.x - this.ancho / 2;
+    	this.bordDer = this.x + this.ancho / 2;
+    	this.bordSup = this.y - this.alto / 2;
+    	this.bordInf = this.y + this.alto / 2;
+        
+        
     } 
-
+    
+    
+    public void actualizarBordes() {
+    	this.bordIz = this.x - this.ancho / 10;
+    	this.bordDer = this.x + this.ancho / 10;
+    	this.bordSup = this.y - this.alto / 10;
+    	this.bordInf = this.y + this.alto / 10;
+    }
+    
     public void moverIzquierda() {
         this.x -= velocidad;
         this.direccionActual = "izquierda";
-        this.bordIz = this.x - (this.ancho / 2);
+        actualizarBordes();
     }
     
     public void moverDerecha() {
         this.x += velocidad;
         this.direccionActual = "derecha";
-        this.bordDer = x + this.ancho / 2;
+        actualizarBordes();
     }
 
     public void moverArriba() {
         this.y -= velocidad;
         this.direccionActual = "arriba";
-        this.bordSup = y - this.alto / 2;
+        actualizarBordes();
     }
 
     public void moverAbajo() {
         this.y += velocidad;
         this.direccionActual = "abajo";
-        this.bordInf = y + this.alto / 2;
+        actualizarBordes();
     }
 
     // Getter para obtener la dirección actual
