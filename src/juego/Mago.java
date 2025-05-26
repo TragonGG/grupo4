@@ -36,7 +36,7 @@ public class Mago {
         
     } 
     
-    
+  //metodo para actualizar los bordes al mover el mago
     public void actualizarBordes() {
     	this.bordIz = this.x - this.ancho / 10;
     	this.bordDer = this.x + this.ancho / 10;
@@ -95,10 +95,12 @@ public class Mago {
         }
     }  
     
+   //getter para el X del mago
     public double getX() {
         return x;
     }
 
+  //getter para el Y del mago
     public double getY() {
         return y;
     }
