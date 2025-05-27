@@ -32,8 +32,9 @@ public class Juego extends InterfaceJuego {
         for (int i = 0; i < rocas.length; i++) {
             rocas[i] = new Obstaculos(posX[i], posY[i]);
         }
-        this.menu = new Menu(1060, 400, 260, 600);
-        
+        // menu
+        this.menu = new Menu(1060, 400, 299, 800);
+        //
         this.arr = false;
         this.izq = false;
         this.der = false;
@@ -48,6 +49,10 @@ public class Juego extends InterfaceJuego {
     	entorno.dibujarImagen(fondo, 400, 300, 0, 2); // Dibuja el fondo 1
     	menu.dibujar(entorno);
     	
+  
+    	if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+    	    menu.verificarClick(entorno.mouseX(), entorno.mouseY());
+    	}
     	
     	//Metodo de colisiones
     	this.colisionPersonaje(mago);
