@@ -8,6 +8,7 @@ public class Juego extends InterfaceJuego {
 	
     private Entorno entorno;
     private Mago mago; // Instancia de Mago
+    private Menu menu;
     private Image fondo; // Instancia de Fondo
     private Murcielago[] murcielagos;
     private Obstaculos[] rocas;
@@ -31,7 +32,7 @@ public class Juego extends InterfaceJuego {
         for (int i = 0; i < rocas.length; i++) {
             rocas[i] = new Obstaculos(posX[i], posY[i]);
         }
-        
+        this.menu = new Menu(1060, 400, 260, 600);
         
         this.arr = false;
         this.izq = false;
@@ -45,7 +46,7 @@ public class Juego extends InterfaceJuego {
     public void tick() {
     	// Procesamiento de un instante de tiempo
     	entorno.dibujarImagen(fondo, 400, 300, 0, 2); // Dibuja el fondo 1
-    	
+    	menu.dibujar(entorno);
     	
     	
     	//Metodo de colisiones
@@ -108,6 +109,7 @@ public class Juego extends InterfaceJuego {
  
     
     //Colisiones
+ 
     public void colisionPersonaje(Mago m) {
         // Borde izquierdo
         if (Math.abs(m.bordIz - 0) < 2) {
@@ -119,8 +121,8 @@ public class Juego extends InterfaceJuego {
             this.arr = true;
         }
 
-        // Borde derecho
-        if (Math.abs(m.bordDer - entorno.ancho()) < 2) {
+        // Borde derecho - dejando espacio de 200px para hechizos
+        if (Math.abs(m.bordDer - (entorno.ancho() - 280)) < 2) {
             this.der = true;
         }
 
