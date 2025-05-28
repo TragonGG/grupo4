@@ -2,11 +2,16 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Image;
+
 import entorno.Entorno;
+import entorno.Herramientas;
 
 public class MenuInicial {
-    private double x, y, ancho, alto;
+    private double x, y, ancho, alto, escala;
     private boolean iniciarSeleccionado;
+    private Image boton, fondo;
+
 
     // Posición exacta del botón "Iniciar partida"
     private double iniciarX;
@@ -18,6 +23,12 @@ public class MenuInicial {
         this.ancho = ancho;
         this.alto = alto;
 
+    	this.escala = 1;
+    	this.boton = Herramientas.cargarImagen("juego/img/button_rectangle_border.png");
+    	this.fondo = Herramientas.cargarImagen("juego/img/magoo.png");
+    	this.alto = this.fondo.getHeight(null) * this.escala;
+    	this.ancho = this.fondo.getWidth(null) * this.escala;
+        
         this.iniciarSeleccionado = false;
 
         // Definir posición del botón "Iniciar partida"
@@ -27,17 +38,17 @@ public class MenuInicial {
 
     public void dibujar(Entorno entorno) {
         // Dibujar el fondo del menú inicial (pantalla completa)
-        entorno.dibujarRectangulo(x, y, ancho, alto, 0, new Color(60, 60, 60));
+    	entorno.dibujarImagen(fondo, x, y, 0, escala);
 
         // Título "JavaAO"
         entorno.cambiarFont("Gabriola", 80, Color.WHITE);
-        entorno.escribirTexto("JavaAO", x - 80, y - 100);
+        entorno.escribirTexto("El camino de Gondolf", x - 260, y - 100);
 
         // Dibujar rectángulo detrás del botón "Iniciar partida"
-        double rectAncho = 200; // Ancho del rectángulo
-        double rectAlto = 50;   // Alto del rectángulo
-        Color rectColor = new Color(80, 80, 80); // Color del rectángulo
-        entorno.dibujarRectangulo(iniciarX, iniciarY, rectAncho, rectAlto, 0, rectColor);
+        //double rectAncho = 200; // Ancho del rectángulo
+        //double rectAlto = 50;   // Alto del rectángulo
+        //Color rectColor = new Color(80, 80, 80); // Color del rectángulo
+        entorno.dibujarImagen(boton, 605, 443, 0, 1);
 
         // Dibujar texto "Iniciar partida"
         if (iniciarSeleccionado) {
