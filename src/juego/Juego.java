@@ -15,6 +15,7 @@ public class Juego extends InterfaceJuego {
     private boolean arr, aba, izq, der;
     private MenuInicial menuInicial;
     private boolean juegoIniciado = false;
+    private int cooldown;
     
     Juego() {
         this.entorno = new Entorno(this, "Proyecto para TP", 1200, 800);
@@ -22,10 +23,13 @@ public class Juego extends InterfaceJuego {
         this.fondo = Herramientas.cargarImagen("juego/img/fondojuego.png"); //Carga el fondo
         
         
-        this.murcielagos = new Murcielago[50];
+        this.murcielagos = new Murcielago[10];
         for (int i = 0; i < murcielagos.length;i++) {
         	this.murcielagos[i] = new Murcielago(100,50);
         }
+        
+        this.cooldown = 0;
+      
         this.menuInicial = new MenuInicial(600, 400, 1200, 800);
 
         
@@ -35,9 +39,15 @@ public class Juego extends InterfaceJuego {
         for (int i = 0; i < rocas.length; i++) {
             rocas[i] = new Obstaculos(posX[i], posY[i]);
         }
+       
+        
+        
         // menu
         this.menu = new Menu(1060, 400, 299, 800);
-        //
+        
+    
+        
+        //colisiones
         this.arr = false;
         this.izq = false;
         this.der = false;
@@ -62,6 +72,7 @@ public class Juego extends InterfaceJuego {
     	       // Procesamiento de un instante de tiempo
     	       entorno.dibujarImagen(fondo, 400, 300, 0, 2); // Dibuja el fondo 1
     	       menu.dibujar(entorno, mago);
+    	       
     	       
 
     	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
@@ -104,12 +115,62 @@ public class Juego extends InterfaceJuego {
     	       // Dibuja el mago una sola vez con su dirección actual
     	       mago.dibujar(entorno);
     	       
+    	       
+
     	      
     	       // Dibuja y mueve el murciélago
-    	       for (int i = 0; i < murcielagos.length;i++){
-    	          murcielagos[i].dibujar(entorno);
-    	          murcielagos[i].mover(mago);
-    	       }
+    	       for (int i = 0; i < murcielagos.length; i++) {
+    	    	    Murcielago m = murcielagos[i];
+
+    	    	    double[] direccion = m.dirreccionHacia(mago);
+    	    	    double pasoX = direccion[0];
+    	    	    double pasoY = direccion[1];
+
+    	    	    // Simula el movimiento para verificar si habría colisión
+    	    	    double posXtemp = m.x + pasoX;
+    	    	    double posYtemp = m.y + pasoY;
+
+    	    	    // Guardamos posición original
+    	    	    double xOriginal = m.x;
+    	    	    double yOriginal = m.y;
+
+    	    	    // Movemos temporalmente
+    	    	    m.x = posXtemp;
+    	    	    m.y = posYtemp;
+    	    	    m.actualizarBordes();
+
+    	    	    if (!colisionMurcielagos(murcielagos, i) || m.isPrimerMovimiento()) {
+    	    	        // Si no hay colisión, lo dejamos en su nueva posición
+    	    	    	m.marcarMovido();
+    	    	    } else {
+    	    	        // Si hay colisión, volvemos a la posición anterior
+    	    	        m.x = xOriginal;
+    	    	        m.y = yOriginal;
+    	    	        m.actualizarBordes();
+    	    	    }
+    	    	    
+    	    	    
+    	    	    //Si fue golpeado baja el numero de ticks hasta poder sel golpeado nuevamente
+    	    	    if (cooldown > 0) {
+    	    	        cooldown--;
+    	    	    }
+    	    	    
+    	    	    if (colisionMagoMurcielago(mago, m) && cooldown == 0) {
+    	    	        mago.recibirDanio(10);
+    	    	        cooldown = 800; //numero de ticks que tiene que pasar para ser golpeado
+    	    	    }
+    	    	    
+    	    	    m.dibujar(entorno);
+    	    	}
+    	      
+    	       
+    	       
+    	       
+    	       
+    	       
+    	       
+    	       
+    	       
     	       
     	       //Asigna el booleano para las colisiones
     	       this.arr = false;
@@ -158,6 +219,40 @@ public class Juego extends InterfaceJuego {
             if (Math.abs(m.bordSup - r.bordInf) < 5) this.arr = true;
         }
     }
+    
+    public boolean colisionMagoMurcielago(Mago mago, Murcielago m) {
+        return mago.bordDer > m.bordIz &&
+               mago.bordIz < m.bordDer &&
+               mago.bordInf > m.bordSup &&
+               mago.bordSup < m.bordInf;
+    }
+    
+ 
+    public boolean colisionMurcielagos(Murcielago[] murcielagos, int indice) {
+  		//Primer murcielago a comparar
+    	Murcielago n1 = murcielagos[indice];
+  		
+  		for(int i = 0; i<murcielagos.length; i++) {
+  			if (i != indice) {
+  				//Segundo murcielago a comparar
+  				Murcielago n2 = murcielagos[i];
+  				
+  				//verifica los bordes de los murcielagos
+  				boolean colisiona = 
+  		                n1.bordDer > n2.bordIz && //
+  		                n1.bordIz < n2.bordDer &&
+  		                n1.bordInf > n2.bordSup &&
+  		                n1.bordSup < n2.bordInf;
+
+  		            if (colisiona) {
+  		                return true;
+  		            }
+  				
+  			}
+  		}
+  		return false;
+  		
+  	}
 
     
     @SuppressWarnings("unused")

@@ -7,7 +7,7 @@ import entorno.Entorno;
 
 public class Mago {
     private Image[] imagen;
-    public double x, y, velocidad, escala, alto, ancho;
+    private double x, y, velocidad, escala, alto, ancho;
     public double bordIz, bordSup, bordDer, bordInf;
     private String direccionActual;
     
@@ -151,4 +151,5 @@ public class Mago {
     public double getVidaMaxima() { return vidaMaxima; }
     public double getManaActual() { return manaActual; }
     public double getManaMaximo() { return manaMaximo; }
-}
+		
+	}
