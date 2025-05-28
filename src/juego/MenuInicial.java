@@ -22,8 +22,8 @@ public class MenuInicial {
         this.y = y;
         this.ancho = ancho;
         this.alto = alto;
-
-    	this.escala = 1;
+        this.escala = 1;
+        
     	this.boton = Herramientas.cargarImagen("juego/img/button_rectangle_border.png");
     	this.fondo = Herramientas.cargarImagen("juego/img/magoo.png");
     	this.alto = this.fondo.getHeight(null) * this.escala;
@@ -40,14 +40,12 @@ public class MenuInicial {
         // Dibujar el fondo del menú inicial (pantalla completa)
     	entorno.dibujarImagen(fondo, x, y, 0, escala);
 
-        // Título "JavaAO"
+        // Título "El camino de gondolf"
         entorno.cambiarFont("Gabriola", 80, Color.WHITE);
         entorno.escribirTexto("El camino de Gondolf", x - 260, y - 100);
 
-        // Dibujar rectángulo detrás del botón "Iniciar partida"
-        //double rectAncho = 200; // Ancho del rectángulo
-        //double rectAlto = 50;   // Alto del rectángulo
-        //Color rectColor = new Color(80, 80, 80); // Color del rectángulo
+        // Dibujar boton detrás del botón "Iniciar partida"
+
         entorno.dibujarImagen(boton, 605, 443, 0, 1);
 
         // Dibujar texto "Iniciar partida"
