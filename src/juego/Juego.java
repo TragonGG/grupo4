@@ -18,7 +18,7 @@ public class Juego extends InterfaceJuego {
     
     Juego() {
         this.entorno = new Entorno(this, "Proyecto para TP", 1200, 800);
-        this.mago = new Mago(400, 300); // Inicializa el mago en el centro de la ventana
+        this.mago = new Mago(400, 300); // 
         this.fondo = Herramientas.cargarImagen("juego/img/fondojuego.png"); //Carga el fondo
         
         
@@ -61,7 +61,7 @@ public class Juego extends InterfaceJuego {
     	   } else {
     	       // Procesamiento de un instante de tiempo
     	       entorno.dibujarImagen(fondo, 400, 300, 0, 2); // Dibuja el fondo 1
-    	       menu.dibujar(entorno);
+    	       menu.dibujar(entorno, mago);
     	       
 
     	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
@@ -111,14 +111,6 @@ public class Juego extends InterfaceJuego {
     	          murcielagos[i].mover(mago);
     	       }
     	       
-    	       
-    	       
-    	     
-    	       
-    	       
-
-    	       
-    	       
     	       //Asigna el booleano para las colisiones
     	       this.arr = false;
     	       this.izq = false;
@@ -160,7 +152,6 @@ public class Juego extends InterfaceJuego {
             m.bordSup < r.bordInf;
 
         if (colision) {
-            // Detectar de qué lado viene el mago (margen de 5 píxeles de tolerancia)
             if (Math.abs(m.bordDer - r.bordIz) < 5) this.der = true;
             if (Math.abs(m.bordIz - r.bordDer) < 5) this.izq = true;
             if (Math.abs(m.bordInf - r.bordSup) < 5) this.aba = true;
