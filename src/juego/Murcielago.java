@@ -110,11 +110,4 @@ public class Murcielago {
 	public void marcarMovido() {
 	    this.primerMovimiento = false;
 	}
-	
-
-	
-	
-	
-	
-	
 }

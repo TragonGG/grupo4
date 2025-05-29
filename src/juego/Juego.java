@@ -1,4 +1,5 @@
 package juego;
+import java.awt.Color;
 import java.awt.Image;
 
 import entorno.Entorno;
@@ -15,7 +16,9 @@ public class Juego extends InterfaceJuego {
     private boolean arr, aba, izq, der;
     private MenuInicial menuInicial;
     private boolean juegoIniciado = false;
+    private boolean juegoTerminado = false;
     private int cooldown;
+    
     
     Juego() {
         this.entorno = new Entorno(this, "Proyecto para TP", 1200, 800);
@@ -39,14 +42,10 @@ public class Juego extends InterfaceJuego {
         for (int i = 0; i < rocas.length; i++) {
             rocas[i] = new Obstaculos(posX[i], posY[i]);
         }
-       
-        
-        
+
         // menu
         this.menu = new Menu(1060, 400, 299, 800);
-        
-    
-        
+
         //colisiones
         this.arr = false;
         this.izq = false;
@@ -67,8 +66,11 @@ public class Juego extends InterfaceJuego {
     	           if (menuInicial.isIniciarSeleccionado()) {
     	               juegoIniciado = true;
     	           }
+    	          
     	       }
-    	   } else {
+    	       return;
+    	   } 
+    	   if (mago.estaVivo() && !juegoTerminado) {
     	       // Procesamiento de un instante de tiempo
     	       entorno.dibujarImagen(fondo, 400, 300, 0, 2); // Dibuja el fondo 1
     	       menu.dibujar(entorno, mago);
@@ -109,15 +111,10 @@ public class Juego extends InterfaceJuego {
     	           mago.moverDerecha();
     	           seMueve = true;
     	       }
-    	       
-    	       
-    	       
+    	           	       
     	       // Dibuja el mago una sola vez con su dirección actual
     	       mago.dibujar(entorno);
-    	       
-    	       
 
-    	      
     	       // Dibuja y mueve el murciélago
     	       for (int i = 0; i < murcielagos.length; i++) {
     	    	    Murcielago m = murcielagos[i];
@@ -162,25 +159,28 @@ public class Juego extends InterfaceJuego {
     	    	    
     	    	    m.dibujar(entorno);
     	    	}
-    	      
-    	       
-    	       
-    	       
-    	       
-    	       
-    	       
-    	       
-    	       
-    	       
+       
     	       //Asigna el booleano para las colisiones
     	       this.arr = false;
     	       this.izq = false;
     	       this.der = false;
     	       this.aba = false;
+    	       
+    	       //Detecta si el mago muere
+    	       } else {
+    		   
+    	    	   juegoTerminado = true;
+    	    	   entorno.cambiarFont(null, 50, Color.RED);
+    	    	   entorno.escribirTexto("¡Has muerto!", 450, 350);
+    	    	   entorno.cambiarFont(null, 25, Color.WHITE);
+    	    	   entorno.escribirTexto("Presiona X para cerrar el juego", 470, 400);
+    	        
+    	        if (entorno.sePresiono('X')) {
+    	        	System.exit(0);
+    	        }
     	   }
+    	   
     	}
- 
-
     //Colisiones
  
     public void colisionPersonaje(Mago m) {
@@ -247,12 +247,11 @@ public class Juego extends InterfaceJuego {
   		            if (colisiona) {
   		                return true;
   		            }
-  				
   			}
   		}
   		return false;
-  		
   	}
+    
 
     
     @SuppressWarnings("unused")

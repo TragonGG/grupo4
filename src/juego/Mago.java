@@ -1,6 +1,6 @@
 package juego;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Image;
 import entorno.Herramientas;
 import entorno.Entorno;
