@@ -15,6 +15,7 @@ public class Murcielago {
 	private boolean vida;
 	private boolean primerMovimiento;
 	public double bordIz, bordSup, bordDer, bordInf;
+
 	
 	
 	public Murcielago(double x, double y) {
@@ -41,11 +42,13 @@ public class Murcielago {
 		    }
 
 		    this.escala = 0.3;
-		    this.velocidad = 1.5;
+		    this.velocidad = (Math.random() * 1) + 1;
 		    this.imagen = Herramientas.cargarImagen("juego/img/bat.gif");
 		    
 		    
 		    this.primerMovimiento = true;
+		    
+		    this.vida = true;
 		    
 		    
 	        this.alto = this.imagen.getHeight(null) * this.escala;
@@ -94,15 +97,58 @@ public class Murcielago {
 	    return new double[] {0, 0};
 	}
 	
-	//Metodo para mover al murcielago
-	public void moverHacia(double dx, double dy) {
-	    this.x += dx;
-	    this.y += dy;
-	    actualizarBordes();
+		
+	//Metodo para mover el murcielago
+	public boolean moverHacia(Mago mago, Murcielago[] murcielagos, int murcielagoIndice) {
+	    double[] direccion = this.dirreccionHacia(mago);
+	    double pasoX = direccion[0];
+	    double pasoY = direccion[1];
+
+	    double xOriginal = this.x;
+	    double yOriginal = this.y;
+
+	    // Simula el movimiento
+	    this.x += pasoX;
+	    this.y += pasoY;
+	    this.actualizarBordes();
+
+	    if (!colisionConOtrosMurcielagos(murcielagos, murcielagoIndice) || this.isPrimerMovimiento()) {
+	        this.marcarMovido();
+	        return true;
+	    } else {
+	        // Revertimos movimiento si hay colision
+	        this.x = xOriginal;
+	        this.y = yOriginal;
+	        this.actualizarBordes();
+	        return false;
+	    }
+	}
+	
+	//colision entre murcielagos
+	private boolean colisionConOtrosMurcielagos(Murcielago[] murcielagos, int miIndice) {
+	    for (int i = 0; i < murcielagos.length; i++) {
+	        if (i != miIndice) {
+	            Murcielago otro = murcielagos[i];
+	            if (this.seSuperponeCon(otro)) {
+	                return true;
+	            }
+	        }
+	    }
+	    return false;
 	}
 	
 	
-	//primer movimiento para que la colision no funciones en spawn
+	//b
+	private boolean seSuperponeCon(Murcielago otro) {
+	    return this.bordDer > otro.bordIz &&
+	           this.bordIz < otro.bordDer &&
+	           this.bordInf > otro.bordSup &&
+	           this.bordSup < otro.bordInf;
+	}
+	
+	
+	
+	//primer movimiento para que la colision no funciones en el spawn
 	public boolean isPrimerMovimiento() {
 	    return primerMovimiento;
 	}
@@ -110,4 +156,26 @@ public class Murcielago {
 	public void marcarMovido() {
 	    this.primerMovimiento = false;
 	}
+	
+	
+	public void reponerMurcielagos(Murcielago[] m) {
+		for (int i = 0; i < m.length; i++) {
+			if(m[i] == null) {
+				m[i] = new Murcielago(100,50);
+			}
+				
+		}
+	}
+	
+	//getters para la vida 
+	public boolean estaVivo() {
+	    return this.vida;
+	}
+
+	public void morir() {
+	    this.vida = false;
+	}
+	
+	
+	
 }

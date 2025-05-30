@@ -18,6 +18,11 @@ public class Juego extends InterfaceJuego {
     private boolean juegoIniciado = false;
     private boolean juegoTerminado = false;
     private int cooldown;
+    private int contMur;
+    private int killMur;
+    
+    
+    
     
     
     Juego() {
@@ -29,8 +34,10 @@ public class Juego extends InterfaceJuego {
         this.murcielagos = new Murcielago[10];
         for (int i = 0; i < murcielagos.length;i++) {
         	this.murcielagos[i] = new Murcielago(100,50);
-        }
-        
+        	contMur ++;
+        	 }
+      
+       
         this.cooldown = 0;
       
         this.menuInicial = new MenuInicial(600, 400, 1200, 800);
@@ -116,50 +123,43 @@ public class Juego extends InterfaceJuego {
     	       mago.dibujar(entorno);
 
     	       // Dibuja y mueve el murciélago
-    	       for (int i = 0; i < murcielagos.length; i++) {
-    	    	    Murcielago m = murcielagos[i];
+    	       
+    	       for (int i = 0; i < murcielagos.length; i++) { 
+    	    	    	Murcielago m = murcielagos[i];
+    	    	    	
+    	    	    	
+    	    	    	if (m == null || !m.estaVivo()) {
+    	    	            continue;
+    	    	        }
 
-    	    	    double[] direccion = m.dirreccionHacia(mago);
-    	    	    double pasoX = direccion[0];
-    	    	    double pasoY = direccion[1];
+    	    	    	
+    	    	    	m.moverHacia(mago, murcielagos, i);
 
-    	    	    // Simula el movimiento para verificar si habría colisión
-    	    	    double posXtemp = m.x + pasoX;
-    	    	    double posYtemp = m.y + pasoY;
+    	    	    	if (cooldown > 0) 
+    	    	    		cooldown--;
 
-    	    	    // Guardamos posición original
-    	    	    double xOriginal = m.x;
-    	    	    double yOriginal = m.y;
-
-    	    	    // Movemos temporalmente
-    	    	    m.x = posXtemp;
-    	    	    m.y = posYtemp;
-    	    	    m.actualizarBordes();
-
-    	    	    if (!colisionMurcielagos(murcielagos, i) || m.isPrimerMovimiento()) {
-    	    	        // Si no hay colisión, lo dejamos en su nueva posición
-    	    	    	m.marcarMovido();
-    	    	    } else {
-    	    	        // Si hay colisión, volvemos a la posición anterior
-    	    	        m.x = xOriginal;
-    	    	        m.y = yOriginal;
-    	    	        m.actualizarBordes();
-    	    	    }
-    	    	    
-    	    	    
-    	    	    //Si fue golpeado baja el numero de ticks hasta poder sel golpeado nuevamente
-    	    	    if (cooldown > 0) {
-    	    	        cooldown--;
-    	    	    }
-    	    	    
-    	    	    if (colisionMagoMurcielago(mago, m) && cooldown == 0) {
-    	    	        mago.recibirDanio(10);
-    	    	        cooldown = 800; //numero de ticks que tiene que pasar para ser golpeado
-    	    	    }
-    	    	    
+    	    	    	if (colisionMagoMurcielago(mago, murcielagos[i]) && cooldown == 0) {
+    	    	    		mago.recibirDanio(10);
+    	    	    		cooldown = 800; // tick para recibir daño devuelta
+    	    	    		m.morir(); 
+    	    	    		contMur--; // baja el contador de Murcielagos vivos
+    	    	    		killMur++; // sube el cont de kills
+    	    	    	}
     	    	    m.dibujar(entorno);
+    	    	    }
+    	    	    	    
+    	       	// condicion para el respawn de los murcielagos
+    	       if (killMur >= 10) {
+    	    	    killMur = 0;
+    	    	    for (int i = 0; i < murcielagos.length; i++) {
+    	    	        murcielagos[i] = new Murcielago(100, 50);
+    	    	    }
+    	    	    contMur = murcielagos.length;
     	    	}
-       
+    	       
+    	       
+    	       
+    	       
     	       //Asigna el booleano para las colisiones
     	       this.arr = false;
     	       this.izq = false;
@@ -173,14 +173,19 @@ public class Juego extends InterfaceJuego {
     	    	   entorno.cambiarFont(null, 50, Color.RED);
     	    	   entorno.escribirTexto("¡Has muerto!", 450, 350);
     	    	   entorno.cambiarFont(null, 25, Color.WHITE);
-    	    	   entorno.escribirTexto("Presiona X para cerrar el juego", 470, 400);
+    	    	   entorno.escribirTexto("Presiona R para reiniciar el juego", 400, 400);
     	        
-    	        if (entorno.sePresiono('X')) {
-    	        	System.exit(0);
-    	        }
-    	   }
+    	    	   if (entorno.sePresiono('R')) {
+                       reiniciarJuego();
+                   }
+    	       }
+           }
+		
     	   
-    	}
+   
+    
+    
+    
     //Colisiones
  
     public void colisionPersonaje(Mago m) {
@@ -251,6 +256,19 @@ public class Juego extends InterfaceJuego {
   		}
   		return false;
   	}
+    
+    private void reiniciarJuego() {
+        this.mago = new Mago(400, 300);
+        this.cooldown = 0;
+        this.juegoTerminado = false;
+        this.juegoIniciado = false; // Vuelve al menú principal
+
+        for (int i = 0; i < murcielagos.length; i++) {
+            murcielagos[i] = new Murcielago(100, 50);
+        }
+	   }
+    
+    
     
 
     
