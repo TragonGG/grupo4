@@ -13,13 +13,13 @@ public class Juego extends InterfaceJuego {
     private Image fondo; // Instancia de Fondo
     private Murcielago[] murcielagos;
     private Obstaculos[] rocas;
-    private boolean arr, aba, izq, der;
+    private boolean arr, aba, izq, der; // Condiciones de verificacion
     private MenuInicial menuInicial;
     private boolean juegoIniciado = false;
     private boolean juegoTerminado = false;
-    private int cooldown;
-    private int contMur;
-    private int killMur;
+    private int cooldown; //Periodo de gracia para no recibir daño
+    private int contMur; //contador de murcielagos
+    private int killMur; // Contador de muertes 
     
     
     
@@ -122,40 +122,46 @@ public class Juego extends InterfaceJuego {
     	       // Dibuja el mago una sola vez con su dirección actual
     	       mago.dibujar(entorno);
 
-    	       // Dibuja y mueve el murciélago
     	       
-    	       for (int i = 0; i < murcielagos.length; i++) { 
-    	    	    	Murcielago m = murcielagos[i];
-    	    	    	
-    	    	    	
-    	    	    	if (m == null || !m.estaVivo()) {
-    	    	            continue;
-    	    	        }
-
-    	    	    	
-    	    	    	m.moverHacia(mago, murcielagos, i);
-
-    	    	    	if (cooldown > 0) 
-    	    	    		cooldown--;
-
-    	    	    	if (colisionMagoMurcielago(mago, murcielagos[i]) && cooldown == 0) {
-    	    	    		mago.recibirDanio(10);
-    	    	    		cooldown = 800; // tick para recibir daño devuelta
-    	    	    		m.morir(); 
-    	    	    		contMur--; // baja el contador de Murcielagos vivos
-    	    	    		killMur++; // sube el cont de kills
-    	    	    	}
-    	    	    m.dibujar(entorno);
-    	    	    }
-    	    	    	    
-    	       	// condicion para el respawn de los murcielagos
-    	       if (killMur >= 10) {
-    	    	    killMur = 0;
-    	    	    for (int i = 0; i < murcielagos.length; i++) {
-    	    	        murcielagos[i] = new Murcielago(100, 50);
-    	    	    }
-    	    	    contMur = murcielagos.length;
-    	    	}
+    	       if (cooldown > 0) 
+      	    		cooldown--;
+    	       
+    	       // Dibuja y mueve el murciélago
+    	       if(killMur <50)
+    	       		{for (int i = 0; i < murcielagos.length; i++) { 
+    	       			Murcielago m = murcielagos[i];
+    	            
+    	       			if (m == null) {
+	    	            	
+	    	            	if (killMur < 50) { // condicion para el respawn de los murcielagos
+	    	            		murcielagos[i] = new Murcielago(100, 50);
+	    	            		contMur++;
+    	                    
+	    	            		}
+	    	            	continue; // Si el murciélago es null, saltar a la siguiente iteración
+    	       			}
+    	            
+    	       			m.moverHacia(mago, murcielagos, i);
+    	            
+    	       			// Verificar colisión con el mago
+    	       			if (colisionMagoMurcielago(mago, murcielagos[i]) && cooldown == 0) {
+    	       				mago.recibirDanio(10);
+    	       				cooldown = 1; // tick para recibir daño devuelta
+    	       				murcielagos[i] = null; // Eliminar el murciélago
+    	       				contMur--; // Baja el contador de Murcielagos vivos
+    	       				killMur++; // Sube el contador de kills
+    	       				System.out.println(killMur);
+    	       				continue; // Salir del bucle para evitar dibujar el murciélago eliminado
+    	       			}
+    	            
+    	       			murcielagos[i].dibujar(entorno);
+    	            }
+    	        }
+    	    	
+    	       
+    	       
+    	       	
+    	     
     	       
     	       
     	       
@@ -262,7 +268,10 @@ public class Juego extends InterfaceJuego {
         this.cooldown = 0;
         this.juegoTerminado = false;
         this.juegoIniciado = false; // Vuelve al menú principal
-
+        this.killMur = 0;
+        this.contMur = murcielagos.length; // 10 vivos al iniciar
+        
+        
         for (int i = 0; i < murcielagos.length; i++) {
             murcielagos[i] = new Murcielago(100, 50);
         }

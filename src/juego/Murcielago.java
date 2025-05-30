@@ -127,7 +127,7 @@ public class Murcielago {
 	//colision entre murcielagos
 	private boolean colisionConOtrosMurcielagos(Murcielago[] murcielagos, int miIndice) {
 	    for (int i = 0; i < murcielagos.length; i++) {
-	        if (i != miIndice) {
+	        if (i != miIndice && murcielagos[i] != null) {
 	            Murcielago otro = murcielagos[i];
 	            if (this.seSuperponeCon(otro)) {
 	                return true;
