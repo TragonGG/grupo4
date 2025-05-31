@@ -19,12 +19,10 @@ public class Juego extends InterfaceJuego {
     private boolean juegoTerminado = false;
     private int cooldown; //Periodo de gracia para no recibir daño
     private int contMur; //contador de murcielagos
-    private int killMur; // Contador de muertes 
-    
-    
-    
-    
-    
+    public static int killMur; // Contador de muertes 
+    private boolean win = false;
+
+
     Juego() {
         this.entorno = new Entorno(this, "Proyecto para TP", 1200, 800);
         this.mago = new Mago(400, 300); // 
@@ -80,7 +78,7 @@ public class Juego extends InterfaceJuego {
     	   } 
     	   if (mago.estaVivo() && !juegoTerminado) {
     	       // Procesamiento de un instante de tiempo
-    	       entorno.dibujarImagen(fondo, 400, 300, 0, 2); // Dibuja el fondo 1
+    	       entorno.dibujarImagen(fondo, 311, 400, 0, 1); // Dibuja el fondo 1
     	       menu.dibujar(entorno, mago);
     	       
     	       
@@ -155,42 +153,34 @@ public class Juego extends InterfaceJuego {
     	            
     	       			murcielagos[i].dibujar(entorno);
     	            }
-    	        }
-    	    	
-    	       
-    	       
-    	       	
-    	     
-    	       
-    	       
-    	       
-    	       
+    	        } 
     	       //Asigna el booleano para las colisiones
     	       this.arr = false;
     	       this.izq = false;
     	       this.der = false;
     	       this.aba = false;
     	       
-    	       //Detecta si el mago muere
-    	       } else {
-    		   
-    	    	   juegoTerminado = true;
-    	    	   entorno.cambiarFont(null, 50, Color.RED);
-    	    	   entorno.escribirTexto("¡Has muerto!", 450, 350);
-    	    	   entorno.cambiarFont(null, 25, Color.WHITE);
-    	    	   entorno.escribirTexto("Presiona R para reiniciar el juego", 400, 400);
-    	        
-    	    	   if (entorno.sePresiono('R')) {
+    	       if (contMur == 0) {
+                   if (win = true);
+                         //entorno.colorFondo(Color.BLACK);
+                            entorno.cambiarFont(null, 50, Color.RED);
+                            entorno.escribirTexto("¡HAS GANADO!", 400, 350);
+                            entorno.cambiarFont(null, 25, Color.WHITE);
+                            entorno.escribirTexto("Sos re capo", 400, 400);
+                }
+               //Detecta si el mago muere
+               } else {
+                   juegoTerminado = true;
+                   entorno.cambiarFont(null, 50, Color.RED);
+                   entorno.escribirTexto("¡Has muerto!", 450, 350);
+                   entorno.cambiarFont(null, 25, Color.WHITE);
+                   entorno.escribirTexto("Presiona R para reiniciar el juego", 400, 400);
+
+                   if (entorno.sePresiono('R')) {
                        reiniciarJuego();
                    }
-    	       }
+               }
            }
-		
-    	   
-   
-    
-    
-    
     //Colisiones
  
     public void colisionPersonaje(Mago m) {
@@ -261,9 +251,7 @@ public class Juego extends InterfaceJuego {
   		}
   		return false;
   	}
-    
-    
-    
+
     //Metodos Menu
     
     private void reiniciarJuego() {
@@ -286,9 +274,6 @@ public class Juego extends InterfaceJuego {
         contMur--; // Baja el contador de Murcielagos vivos
         killMur++; // Sube el contador de kills   	
     }
-    
-    
-
     
     @SuppressWarnings("unused")
     public static void main(String[] args) {
