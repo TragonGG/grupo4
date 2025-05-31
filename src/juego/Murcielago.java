@@ -22,7 +22,7 @@ public class Murcielago {
 		   	this.generarPosicionAleatoria();
 		   	
 		   	this.escala = 0.3;
-		    this.velocidad = (Math.random() * 1) + 1;
+		    this.velocidad = 1.5;
 		    this.imagen = Herramientas.cargarImagen("juego/img/bat.gif");
 		    
 		    
@@ -92,24 +92,28 @@ public class Murcielago {
 	    this.y += pasoY;
 	    this.actualizarBordes();
 
-	    if (!colisionConOtrosMurcielagos(murcielagos, murcielagoIndice) || this.isPrimerMovimiento()) {
-	        this.marcarMovido();
+	    // Verifica colisión Y cercanía con otros murciélagos
+	    boolean hayColision = colisionConOtrosMurcielagos(murcielagos, murcielagoIndice);
+	    boolean muyCerca = estaCercaDeOtrosMurcielagos(murcielagos, murcielagoIndice, 40);
+
+	    if (!hayColision && !muyCerca) {
 	        return true;
 	    } else {
 	        // Revertimos el movimiento
 	        this.x = xOriginal;
 	        this.y = yOriginal;
 
-	        // Intentamos moverse en una dirección levemente aleatoria
-	        double angulo = Math.random() * 2 * Math.PI;
-	        double pasoDesvioX = Math.cos(angulo) * this.velocidad * 0.5;
-	        double pasoDesvioY = Math.sin(angulo) * this.velocidad * 0.5;
+	        // Retrocede 5 píxeles en dirección contraria
+	        double distanciaMovimiento = Math.sqrt(pasoX * pasoX + pasoY * pasoY);
 
-	        this.x += pasoDesvioX;
-	        this.y += pasoDesvioY;
+	        // Normalizamos el vector movimiento y retrocedemos 5 píxeles
+	        double retrocesoX = - (pasoX / distanciaMovimiento) * 1;
+	        double retrocesoY = - (pasoY / distanciaMovimiento) * 1;
+
+	        this.x += retrocesoX;
+	        this.y += retrocesoY;
 	        this.actualizarBordes();
 
-	        // No marcamos como movido aún, pero al menos sale del bloqueo
 	        return false;
 	    }
 	}
