@@ -34,6 +34,7 @@ public class Juego extends InterfaceJuego {
         this.murcielagos = new Murcielago[10];
         for (int i = 0; i < murcielagos.length;i++) {
         	this.murcielagos[i] = new Murcielago(100,50);
+        	murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 175);
         	contMur ++;
         	 }
       
@@ -127,14 +128,15 @@ public class Juego extends InterfaceJuego {
       	    		cooldown--;
     	       
     	       // Dibuja y mueve el murciélago
-    	       if(killMur <50)
+    	       if(killMur <50) // condicion para el respawn de los murcielagos
     	       		{for (int i = 0; i < murcielagos.length; i++) { 
     	       			Murcielago m = murcielagos[i];
     	            
     	       			if (m == null) {
 	    	            	
-	    	            	if (killMur <= 40) { // condicion para el respawn de los murcielagos
+	    	            	if (killMur <= 40) {  	            		
 	    	            		murcielagos[i] = new Murcielago(100, 50);
+	    	            		murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 50);
 	    	            		contMur++;
     	                    
 	    	            		}
@@ -147,9 +149,7 @@ public class Juego extends InterfaceJuego {
     	       			if (colisionMagoMurcielago(mago, murcielagos[i]) && cooldown == 0) {
     	       				mago.recibirDanio(10);
     	       				cooldown = 100; // tick para recibir daño devuelta
-    	       				eliminarMurcielago(i);
-    	       				System.out.println(contMur);
-    	       				System.out.println(killMur);
+    	       				eliminarMurcielago(i);  	       				
     	       				continue; // Salir del bucle para evitar dibujar el murciélago eliminado
     	       			}
     	            

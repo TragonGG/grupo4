@@ -19,29 +19,9 @@ public class Murcielago {
 	
 	
 	public Murcielago(double x, double y) {
-		   int lado =(int) (Math.random() * 4); // 0 = arriba, 1 = abajo, 2 = izquierda, 3 = derecha
-
-		    switch (lado) // SPAWN DE LOS MURCIELAGOS
-		    			{
-		        case 0: // Arriba
-		            this.x = Math.random() * 900;
-		            this.y = 0;
-		            break;
-		        case 1: // Abajo
-		            this.x = (Math.random() * 900);
-		            this.y = 780;
-		            break;
-		        case 2: // Izquierda
-		            this.x = 0;
-		            this.y = Math.random() * 780;
-		            break;
-		        case 3: // Derecha
-		            this.x = 900;
-		            this.y = Math.random() * 800;
-  		            break;
-		    }
-
-		    this.escala = 0.3;
+		   	this.generarPosicionAleatoria();
+		   	
+		   	this.escala = 0.3;
 		    this.velocidad = (Math.random() * 1) + 1;
 		    this.imagen = Herramientas.cargarImagen("juego/img/bat.gif");
 		    
@@ -73,7 +53,7 @@ public class Murcielago {
 		 
 	
 	
-	//Dibujata a el Mago
+	//Dibuja a el Murcielago
 	public void dibujar(Entorno entorno) {
 		entorno.dibujarImagen(imagen, x, y, 0,escala);
 	}
@@ -116,10 +96,20 @@ public class Murcielago {
 	        this.marcarMovido();
 	        return true;
 	    } else {
-	        // Revertimos movimiento si hay colision
+	        // Revertimos el movimiento
 	        this.x = xOriginal;
 	        this.y = yOriginal;
+
+	        // Intentamos moverse en una dirección levemente aleatoria
+	        double angulo = Math.random() * 2 * Math.PI;
+	        double pasoDesvioX = Math.cos(angulo) * this.velocidad * 0.5;
+	        double pasoDesvioY = Math.sin(angulo) * this.velocidad * 0.5;
+
+	        this.x += pasoDesvioX;
+	        this.y += pasoDesvioY;
 	        this.actualizarBordes();
+
+	        // No marcamos como movido aún, pero al menos sale del bloqueo
 	        return false;
 	    }
 	}
@@ -138,7 +128,7 @@ public class Murcielago {
 	}
 	
 	
-	//b
+	//Verificacion de colisioens
 	private boolean seSuperponeCon(Murcielago otro) {
 	    return this.bordDer > otro.bordIz &&
 	           this.bordIz < otro.bordDer &&
@@ -167,23 +157,60 @@ public class Murcielago {
 		}
 	}
 	
+	
+	private void generarPosicionAleatoria() {
+	    int lado = (int) (Math.random() * 4); // 0 = arriba, 1 = abajo, 2 = izquierda, 3 = derecha
 
-	
-	
-	
-	
-	
-	
-	
-	//getters para la vida 
-	public boolean estaVivo() {
-	    return this.vida;
+	    switch (lado) {
+	        case 0: // Arriba
+	            this.x = Math.random() * 900;
+	            this.y = 0;
+	            break;
+	        case 1: // Abajo
+	            this.x = Math.random() * 900;
+	            this.y = 780;
+	            break;
+	        case 2: // Izquierda
+	            this.x = 0;
+	            this.y = Math.random() * 780;
+	            break;
+	        case 3: // Derecha
+	            this.x = 900;
+	            this.y = Math.random() * 800;
+	            break;
+	    }
 	}
+	
+	public boolean estaCercaDeOtrosMurcielagos(Murcielago[] murcielagos, int miIndice, double distanciaMinima) {
+	    for (int i = 0; i < murcielagos.length; i++) {
+	        if (i != miIndice && murcielagos[i] != null) {
+	            Murcielago otro = murcielagos[i];
+	            
+	            double dx = this.x - otro.x;
+	            double dy = this.y - otro.y;
+	            double distancia = Math.sqrt(dx * dx + dy * dy);
+	            
+	            if (distancia < distanciaMinima) {
+	                return true; // Está muy cerca de otro murciélago
+	            }
+	        }
+	    }
+	    return false; // No está cerca de ninguno
+	}
+	
+	public void generarPosicionSinSuperposicion(Murcielago[] murcielagos, int miIndice, double distanciaMinima) {
+	    boolean posicionValida = false;
 
-	public void morir() {
-	    this.vida = false;
+	    while (!posicionValida) {
+	        generarPosicionAleatoria();
+	        this.actualizarBordes();
+
+	        if (!estaCercaDeOtrosMurcielagos(murcielagos, miIndice, distanciaMinima)) {
+	            posicionValida = true;
+	        }
+	    }
 	}
 	
-	
+
 	
 }
