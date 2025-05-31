@@ -10,12 +10,8 @@ public class Menu {
     private double x, y, ancho, alto;
     private Hechizo.Apocalipsis apocalipsis;
     private Hechizo.MisilMagico misilMagico;
-    private boolean lanzarSeleccionado;
     private Image fondo;
-    
-    // Posiciones y dimensiones para facilitar la alineación
-    private double rectLanzarAncho;
-    private double rectLanzarAlto;
+   
 
     public Menu(double x, double y, double ancho, double alto) {
         this.x = x;
@@ -106,7 +102,7 @@ public class Menu {
         entorno.dibujarRectangulo(x, separadorY, ancho - 40, 4, 0, new Color(100, 100, 120, 150));
 
         // Título centrado horizontalmente
-        entorno.cambiarFont("Bahnschrift", 44, Color.BLACK);
+        entorno.cambiarFont("Gabriola", 50, Color.WHITE);
         entorno.escribirTexto("HECHIZOS", 960, y - alto/2 + 190);
 
         // Posiciones verticales para hechizos
@@ -157,6 +153,15 @@ public class Menu {
         } 
         if (misilMagico.estaSeleccionado()) {
             return "Misil Magico";
+        }
+        return null;
+    }
+    public Hechizo getObjetoHechizoSeleccionado() {
+        if (apocalipsis.estaSeleccionado()) {
+            return apocalipsis;
+        } 
+        if (misilMagico.estaSeleccionado()) {
+            return misilMagico;
         }
         return null;
     }

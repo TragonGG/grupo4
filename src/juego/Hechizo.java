@@ -1,4 +1,8 @@
 package juego;
+import java.awt.Image;
+
+import entorno.Entorno;
+import entorno.Herramientas;
 
 public class Hechizo {
     private String nombre;
@@ -54,19 +58,56 @@ public class Hechizo {
     
     // Hechizo específico: Apocalipsis
     public static class Apocalipsis extends Hechizo {
+        private Image efectoGif;
+        private boolean mostrandoEfecto;
+        private int duracionEfecto;
+        private double efectoX, efectoY;
+        
         public Apocalipsis(double x, double y) {
-            super("Apocalipsis", x, y, 120, 25, 50); // Cuesta 50 de mana
+            super("Apocalipsis", x, y, 120, 25, 35);
+            this.efectoGif = Herramientas.cargarImagen("juego/img/apocalipsis.gif");
+            this.mostrandoEfecto = false;
+            this.duracionEfecto = 0;
+            this.efectoX = 0;
+            this.efectoY = 0;
+        }
+        
+        // Nuevo método para ejecutar en coordenadas específicas
+        public void ejecutarEn(Mago mago, double x, double y) {
+            if (mago.usarMana(getCostoMana())) {
+                System.out.println("¡APOCALIPSIS DESATADO! Daño masivo en área");
+                this.mostrandoEfecto = true;
+                this.duracionEfecto = 60;
+                this.efectoX = x; // Guardar coordenadas del cursor
+                this.efectoY = y;
+            } else {
+                System.out.println("No hay suficiente mana para Apocalipsis");
+            }
         }
         
         @Override
         public void ejecutar(Mago mago) {
-            if (mago.usarMana(getCostoMana())) {
-                // Lógica específica del Apocalipsis
-                System.out.println("¡APOCALIPSIS DESATADO! Daño masivo en área");
-                // Aquí podrías agregar efectos visuales, daño a enemigos, etc.
-            } else {
-                System.out.println("No hay suficiente mana para Apocalipsis");
+            // Mantener el método original para compatibilidad
+            ejecutarEn(mago, mago.getX(), mago.getY());
+        }
+        
+        public void actualizar() {
+            if (mostrandoEfecto) {
+                duracionEfecto--;
+                if (duracionEfecto <= 0) {
+                    mostrandoEfecto = false;
+                }
             }
+        }
+        
+        public void dibujarEfecto(Entorno entorno) {
+            if (mostrandoEfecto) {
+                entorno.dibujarImagen(efectoGif, efectoX, efectoY, 0, 1);
+            }
+        }
+        
+        public boolean estaEjecutandose() {
+            return mostrandoEfecto;
         }
     }
     

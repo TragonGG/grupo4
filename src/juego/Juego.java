@@ -86,6 +86,31 @@ public class Juego extends InterfaceJuego {
     	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
     	           menu.verificarClick(entorno.mouseX(), entorno.mouseY());
     	       }
+    	    // Verificar clic derecho para lanzar hechizo
+    	       if (entorno.sePresionoBoton(entorno.BOTON_DERECHO)) {
+    	    	    Hechizo hechizoSeleccionado = menu.getObjetoHechizoSeleccionado();
+    	    	    if (hechizoSeleccionado != null) {
+    	    	        // Si es Apocalipsis, lanzar en coordenadas del mouse
+    	    	        if (hechizoSeleccionado instanceof Hechizo.Apocalipsis) {
+    	    	            Hechizo.Apocalipsis apocalipsis = (Hechizo.Apocalipsis) hechizoSeleccionado;
+    	    	            apocalipsis.ejecutarEn(mago, entorno.mouseX(), entorno.mouseY());
+    	    	        } else {
+    	    	            // Para otros hechizos, usar el método normal
+    	    	            hechizoSeleccionado.ejecutar(mago);
+    	    	        }
+    	    	    }
+    	    	}
+
+    	       // Actualizar y dibujar efectos de hechizos
+    	       Hechizo hechizoActivo = menu.getObjetoHechizoSeleccionado();
+    	       if (hechizoActivo != null) {
+    	           if (hechizoActivo instanceof Hechizo.Apocalipsis) {
+    	               Hechizo.Apocalipsis apocalipsis = (Hechizo.Apocalipsis) hechizoActivo;
+    	               apocalipsis.actualizar();
+    	               apocalipsis.dibujarEfecto(entorno); // Ya no necesita coordenadas
+    	           }
+    	           // Agregar lógica similar para otros hechizos
+    	       }
     	       
     	       //Metodo de colisiones
     	       this.colisionPersonaje(mago);
