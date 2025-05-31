@@ -16,6 +16,9 @@ public class Hechizo {
     public int duracionEfecto;
     public double efectoX, efectoY;
     
+    // Sistema de área de efecto
+    public double radioEfecto;
+    
     public enum TipoHechizo {
         APOCALIPSIS, MISIL_MAGICO, CURACION
     }
@@ -31,6 +34,19 @@ public class Hechizo {
         this.tipo = tipo;
         this.mostrandoEfecto = false;
         this.duracionEfecto = 0;
+        
+        // Definir radio de efecto según el tipo
+        switch (tipo) {
+            case APOCALIPSIS:
+                this.radioEfecto = 150; // Área grande
+                break;
+            case MISIL_MAGICO:
+                this.radioEfecto = 80; // Área mediana
+                break;
+            case CURACION:
+                this.radioEfecto = 0; // Sin área de efecto ofensiva
+                break;
+        }
         
         // Cargar imagen del efecto según el tipo
         cargarEfectoVisual();
@@ -50,10 +66,10 @@ public class Hechizo {
         }
     }
     
-    public void ejecutarEn(Mago mago, double targetX, double targetY) {
+    public boolean ejecutarEn(Mago mago, double targetX, double targetY, Murcielago[] murcielagos, Juego juego) {
         if (!mago.usarMana(costoMana)) {
             System.out.println("No hay suficiente mana para " + nombre);
-            return;
+            return false;
         }
         
         // Lógica específica según el tipo de hechizo
@@ -61,11 +77,13 @@ public class Hechizo {
             case APOCALIPSIS:
                 System.out.println("¡APOCALIPSIS DESATADO! Daño masivo en área");
                 iniciarEfecto(targetX, targetY, 60);
+                eliminarMurcielagosEnArea(targetX, targetY, murcielagos, juego);
                 break;
                 
             case MISIL_MAGICO:
                 System.out.println("¡Misil Mágico lanzado! Proyectil dirigido");
                 iniciarEfecto(targetX, targetY, 30);
+                eliminarMurcielagosEnArea(targetX, targetY, murcielagos, juego);
                 break;
                 
             case CURACION:
@@ -73,8 +91,28 @@ public class Hechizo {
                 mago.curar(30);
                 iniciarEfecto(mago.getX(), mago.getY(), 40);
                 break;
-               
         }
+        
+        return true; // Hechizo ejecutado exitosamente
+    }
+    
+    private void eliminarMurcielagosEnArea(double centroX, double centroY, Murcielago[] murcielagos, Juego juego) {
+        for (int i = 0; i < murcielagos.length; i++) {
+            if (murcielagos[i] != null) {
+                double distancia = calcularDistancia(centroX, centroY, murcielagos[i].x, murcielagos[i].y);
+                
+                if (distancia <= radioEfecto) {
+                    System.out.println("¡Murciélago eliminado por " + nombre + "!");
+                    juego.eliminarMurcielagoPublico(i); // Necesitaremos hacer este método público
+                }
+            }
+        }
+    }
+    
+    private double calcularDistancia(double x1, double y1, double x2, double y2) {
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        return Math.sqrt(dx * dx + dy * dy);
     }
     
     private void iniciarEfecto(double x, double y, int duracion) {
@@ -110,6 +148,7 @@ public class Hechizo {
     public double getAlto() { return alto; }
     public TipoHechizo getTipo() { return tipo; }
     public boolean estaEjecutandose() { return mostrandoEfecto; }
+    public double getRadioEfecto() { return radioEfecto; }
     
     public boolean contienePunto(double mouseX, double mouseY) {
         return mouseX >= (x - ancho/2) && mouseX <= (x + ancho/2) &&

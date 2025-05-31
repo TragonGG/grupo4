@@ -80,21 +80,26 @@ public class Juego extends InterfaceJuego {
     	       // Procesamiento de un instante de tiempo
     	       entorno.dibujarImagen(fondo, 311, 400, 0, 1); // Dibuja el fondo 1
     	       menu.dibujar(entorno, mago);
-    	       
+    	       mago.regenerarMana();
     	       
 
     	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
     	           menu.verificarClick(entorno.mouseX(), entorno.mouseY());
     	       }
-    	    // Verificar clic derecho para lanzar hechizo
+    	       
     	       if (entorno.sePresionoBoton(entorno.BOTON_DERECHO)) {
     	    	    Hechizo hechizoSeleccionado = menu.getHechizoSeleccionado();
     	    	    if (hechizoSeleccionado != null) {
-    	    	        hechizoSeleccionado.ejecutarEn(mago, entorno.mouseX(), entorno.mouseY());
+    	    	        // Ejecutar el hechizo y deseleccionarlo si se ejecuta exitosamente
+    	    	        boolean hechizoEjecutado = hechizoSeleccionado.ejecutarEn(mago, entorno.mouseX(), entorno.mouseY(), murcielagos, this);
+    	    	        if (hechizoEjecutado) {
+    	    	            menu.deseleccionarHechizo();
+    	    	        }
     	    	    }
-    	    	}    
+    	    	}  
     	       
     	       menu.actualizarHechizos();
+    	       
     	       menu.dibujarEfectosHechizos(entorno);
     	       
     	       //Metodo de colisiones
@@ -283,6 +288,13 @@ public class Juego extends InterfaceJuego {
         murcielagos[indice] = null; // Elimina el murciélago
         contMur--; // Baja el contador de Murcielagos vivos
         killMur++; // Sube el contador de kills   	
+    }
+    public void eliminarMurcielagoPublico(int indice) {
+        if (indice >= 0 && indice < murcielagos.length && murcielagos[indice] != null) {
+            murcielagos[indice] = null; // Elimina el murciélago
+            contMur--; // Baja el contador de Murcielagos vivos
+            killMur++; // Sube el contador de kills
+        }
     }
     
     @SuppressWarnings("unused")

@@ -129,6 +129,14 @@ public class Menu {
         return (hechizoSeleccionado >= 0) ? hechizos[hechizoSeleccionado] : null;
     }
     
+    // Nuevo método para deseleccionar el hechizo actual
+    public void deseleccionarHechizo() {
+        if (hechizoSeleccionado >= 0) {
+            hechizos[hechizoSeleccionado].setSeleccionado(false);
+            hechizoSeleccionado = -1;
+        }
+    }
+    
     public void actualizarHechizos() {
         for (Hechizo hechizo : hechizos) {
             hechizo.actualizar();
