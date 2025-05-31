@@ -133,7 +133,7 @@ public class Juego extends InterfaceJuego {
     	            
     	       			if (m == null) {
 	    	            	
-	    	            	if (killMur < 50) { // condicion para el respawn de los murcielagos
+	    	            	if (killMur <= 40) { // condicion para el respawn de los murcielagos
 	    	            		murcielagos[i] = new Murcielago(100, 50);
 	    	            		contMur++;
     	                    
@@ -146,10 +146,9 @@ public class Juego extends InterfaceJuego {
     	       			// Verificar colisión con el mago
     	       			if (colisionMagoMurcielago(mago, murcielagos[i]) && cooldown == 0) {
     	       				mago.recibirDanio(10);
-    	       				cooldown = 1; // tick para recibir daño devuelta
-    	       				murcielagos[i] = null; // Eliminar el murciélago
-    	       				contMur--; // Baja el contador de Murcielagos vivos
-    	       				killMur++; // Sube el contador de kills
+    	       				cooldown = 100; // tick para recibir daño devuelta
+    	       				eliminarMurcielago(i);
+    	       				System.out.println(contMur);
     	       				System.out.println(killMur);
     	       				continue; // Salir del bucle para evitar dibujar el murciélago eliminado
     	       			}
@@ -263,6 +262,10 @@ public class Juego extends InterfaceJuego {
   		return false;
   	}
     
+    
+    
+    //Metodos Menu
+    
     private void reiniciarJuego() {
         this.mago = new Mago(400, 300);
         this.cooldown = 0;
@@ -277,6 +280,12 @@ public class Juego extends InterfaceJuego {
         }
 	   }
     
+    //Metodos eliminaciones
+    private void eliminarMurcielago(int indice) {
+        murcielagos[indice] = null; // Elimina el murciélago
+        contMur--; // Baja el contador de Murcielagos vivos
+        killMur++; // Sube el contador de kills   	
+    }
     
     
 

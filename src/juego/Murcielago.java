@@ -167,6 +167,14 @@ public class Murcielago {
 		}
 	}
 	
+
+	
+	
+	
+	
+	
+	
+	
 	//getters para la vida 
 	public boolean estaVivo() {
 	    return this.vida;

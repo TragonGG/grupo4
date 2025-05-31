@@ -19,7 +19,7 @@ public class Mago {
         this.x = x;
         this.y = y;
         this.velocidad = 3;
-        this.escala = 0.5;
+        this.escala = 0.2;
         this.direccionActual = "derecha";
         
         // Inicializar vida y mana
@@ -29,26 +29,26 @@ public class Mago {
         this.manaActual = 100;
         
         this.imagen = new Image[5];
-        this.imagen[0] = Herramientas.cargarImagen("juego/img/magoA-V1.gif");
-        this.imagen[1] = Herramientas.cargarImagen("juego/img/magoD-V1.gif");
-        this.imagen[2] = Herramientas.cargarImagen("juego/img/magoW-V1.gif");
-        this.imagen[3] = Herramientas.cargarImagen("juego/img/magoS-V1.gif");
+        this.imagen[0] = Herramientas.cargarImagen("juego/img/magoIzquierdaVFinal.png");
+        this.imagen[1] = Herramientas.cargarImagen("juego/img/magoDerechaVFinal.png");
+        this.imagen[2] = Herramientas.cargarImagen("juego/img/magoArribaVFinal.png");
+        this.imagen[3] = Herramientas.cargarImagen("juego/img/magoAbajoVFinal.png");
         this.imagen[4] = Herramientas.cargarImagen("juego/img/magoBomba-V1.gif");
         
         this.alto = this.imagen[1].getHeight(null) * this.escala;
         this.ancho = this.imagen[1].getWidth(null) * this.escala;
         
-        this.bordIz = this.x - this.ancho / 2;
+        this.bordIz = this.x - this.ancho / 3;
     	this.bordDer = this.x + this.ancho / 2;
-    	this.bordSup = this.y - this.alto / 2;
-    	this.bordInf = this.y + this.alto / 2;
+    	this.bordSup = this.y - this.alto / 3;
+    	this.bordInf = this.y + this.alto / 3.5;
     } 
     
     public void actualizarBordes() {
-    	this.bordIz = this.x - this.ancho / 10;
-    	this.bordDer = this.x + this.ancho / 10;
-    	this.bordSup = this.y - this.alto / 10;
-    	this.bordInf = this.y + this.alto / 10;
+    	this.bordIz = this.x - this.ancho / 3;
+    	this.bordDer = this.x + this.ancho / 2;
+    	this.bordSup = this.y - this.alto / 3;
+    	this.bordInf = this.y + this.alto / 3.5;
     }
     
     public void moverIzquierda() {
