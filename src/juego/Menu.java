@@ -26,8 +26,8 @@ public class Menu {
         double espacioEntreHechizos = 70;
         
         hechizos = new Hechizo[] {
-            new Hechizo("Apocalipsis", x, hechizoBaseY, 120, 25, 35, Hechizo.TipoHechizo.APOCALIPSIS),
-            new Hechizo("Misil Magico", x, hechizoBaseY + espacioEntreHechizos, 120, 25, 20, Hechizo.TipoHechizo.MISIL_MAGICO),
+            new Hechizo("Apocalipsis", x, hechizoBaseY, 120, 25, 55, Hechizo.TipoHechizo.APOCALIPSIS),
+            new Hechizo("Misil Magico", x, hechizoBaseY + espacioEntreHechizos, 120, 25, 25, Hechizo.TipoHechizo.MISIL_MAGICO),
             new Hechizo("Curacion", x, hechizoBaseY + espacioEntreHechizos * 2, 120, 25, 15, Hechizo.TipoHechizo.CURACION)
         };
     }

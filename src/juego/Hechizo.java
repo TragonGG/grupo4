@@ -103,7 +103,7 @@ public class Hechizo {
                 
                 if (distancia <= radioEfecto) {
                     System.out.println("¡Murciélago eliminado por " + nombre + "!");
-                    juego.eliminarMurcielagoPublico(i); // Necesitaremos hacer este método público
+                    juego.eliminarMurcielagoPublico(i);
                 }
             }
         }

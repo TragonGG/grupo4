@@ -160,8 +160,8 @@ public class Juego extends InterfaceJuego {
     	            
     	       			// Verificar colisión con el mago
     	       			if (colisionMagoMurcielago(mago, murcielagos[i]) && cooldown == 0) {
-    	       				mago.recibirDanio(10);
-    	       				cooldown = 100; // tick para recibir daño devuelta
+    	       				mago.recibirDanio(15);
+    	       				cooldown = 60; // tick para recibir daño devuelta
     	       				eliminarMurcielago(i);  	       				
     	       				continue; // Salir del bucle para evitar dibujar el murciélago eliminado
     	       			}

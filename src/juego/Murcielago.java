@@ -22,7 +22,7 @@ public class Murcielago {
 		   	this.generarPosicionAleatoria();
 		   	
 		   	this.escala = 0.3;
-		    this.velocidad = 1.5;
+		    this.velocidad = 2.0;
 		    this.imagen = Herramientas.cargarImagen("juego/img/bat.gif");
 		    
 		    
