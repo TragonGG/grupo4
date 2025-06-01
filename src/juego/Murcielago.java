@@ -106,9 +106,9 @@ public class Murcielago {
 	        // Retrocede 5 píxeles en dirección contraria
 	        double distanciaMovimiento = Math.sqrt(pasoX * pasoX + pasoY * pasoY);
 
-	        // Normalizamos el vector movimiento y retrocedemos 5 píxeles
-	        double retrocesoX = - (pasoX / distanciaMovimiento) * 1;
-	        double retrocesoY = - (pasoY / distanciaMovimiento) * 1;
+	        // Retroceso
+	        double retrocesoX = - (pasoX / distanciaMovimiento) * 2;
+	        double retrocesoY = - (pasoY / distanciaMovimiento) * 2;
 
 	        this.x += retrocesoX;
 	        this.y += retrocesoY;
@@ -140,28 +140,8 @@ public class Murcielago {
 	           this.bordSup < otro.bordInf;
 	}
 	
-	
-	
-	//primer movimiento para que la colision no funciones en el spawn
-	public boolean isPrimerMovimiento() {
-	    return primerMovimiento;
-	}
 
-	public void marcarMovido() {
-	    this.primerMovimiento = false;
-	}
-	
-	
-	public void reponerMurcielagos(Murcielago[] m) {
-		for (int i = 0; i < m.length; i++) {
-			if(m[i] == null) {
-				m[i] = new Murcielago(100,50);
-			}
-				
-		}
-	}
-	
-	
+
 	private void generarPosicionAleatoria() {
 	    int lado = (int) (Math.random() * 4); // 0 = arriba, 1 = abajo, 2 = izquierda, 3 = derecha
 

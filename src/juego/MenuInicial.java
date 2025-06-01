@@ -15,6 +15,7 @@ public class MenuInicial {
     // Posición exacta del botón "Iniciar partida"
     private double iniciarX;
     private double iniciarY;
+	
 
     public MenuInicial(double x, double y, double ancho, double alto) {
         this.x = x;

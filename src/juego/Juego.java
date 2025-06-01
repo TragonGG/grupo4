@@ -15,6 +15,8 @@ public class Juego extends InterfaceJuego {
     private Obstaculos[] rocas;
     private boolean arr, aba, izq, der; // Condiciones de verificacion
     private MenuInicial menuInicial;
+    private MenuMuerte menuMuerte;
+    private MenuVictoria menuVictoria;
     private boolean juegoIniciado = false;
     private boolean juegoTerminado = false;
     private int cooldown; //Periodo de gracia para no recibir daño
@@ -34,16 +36,19 @@ public class Juego extends InterfaceJuego {
 
         
         this.murcielagos = new Murcielago[10];
-        for (int i = 0; i < murcielagos.length;i++) {
-        	this.murcielagos[i] = new Murcielago(100,50);
-        	murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 175);
-        	contMur ++;
-        	 }
-      
+        	if(contMur<=10)
+        		{for (int i = 0; i < murcielagos.length;i++) {
+        			this.murcielagos[i] = new Murcielago(100,50);
+        			murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 75);
+        			contMur ++;
+        			}
+        		}
        
         this.cooldown = 0;
       
         this.menuInicial = new MenuInicial(600, 400, 1200, 800);
+        this.menuMuerte = new MenuMuerte(600, 400, 1200, 800);
+        this.menuVictoria = new MenuVictoria(600, 400, 1200, 800);
 
         
         rocas = new Obstaculos[5];
@@ -161,7 +166,7 @@ public class Juego extends InterfaceJuego {
 	    	            		contMur++;
     	                    
 	    	            		}
-	    	            	continue; // Si el murciélago es null, saltar a la siguiente iteración
+	    	            	continue; // Si el murciélago es null, salta a la siguiente iteración
     	       			}
     	            
     	       			m.moverHacia(mago, murcielagos, i);
@@ -183,28 +188,40 @@ public class Juego extends InterfaceJuego {
     	       this.der = false;
     	       this.aba = false;
     	       
-    	       if (killMur == 50) {
-                   if (win = true);
-                         //entorno.colorFondo(Color.BLACK);
-                            entorno.cambiarFont(null, 50, Color.RED);
-                            entorno.escribirTexto("¡HAS GANADO!", 400, 350);
-                            entorno.cambiarFont(null, 25, Color.WHITE);
-                            entorno.escribirTexto("Sos re capo", 450, 400);
-                            
-                }
-               //Detecta si el mago muere
-               } else {
-                   juegoTerminado = true;
-                   entorno.cambiarFont(null, 50, Color.RED);
-                   entorno.escribirTexto("¡Has muerto!", 450, 350);
-                   entorno.cambiarFont(null, 25, Color.WHITE);
-                   entorno.escribirTexto("Presiona R para reiniciar el juego", 400, 400);
-
-                   if (entorno.sePresiono('R')) {
-                       reiniciarJuego();
-                   }
+    	       
+               }
+    	   
+    	   if (killMur >= 50 && mago.estaVivo() && !juegoTerminado ) {
+    		   			win =true;
+    		   			menuVictoria.dibujar(entorno);    
+    		   			if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+    		    	           menuVictoria.verificarClick(entorno.mouseX(), entorno.mouseY());
+    		    	           if (menuVictoria.isIniciarSeleccionado()) {
+    		    	               juegoIniciado = true;
+    		    	               reiniciarJuego();
+    		    	               }
+    		    	           menuVictoria.verificarClickSalir(entorno.mouseX(), entorno.mouseY());
+    		   			}
+                        
+            
+           //Detecta si el mago muere
+           } else if(!mago.estaVivo()) {
+               juegoTerminado = true;
+               menuMuerte.dibujar(entorno);
+               if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+    	           menuMuerte.verificarClick(entorno.mouseX(), entorno.mouseY());
+    	           if (menuMuerte.isIniciarSeleccionado()) {
+    	               juegoIniciado = true;
+    	               reiniciarJuego();
+               
+    	           }	
                }
            }
+    }
+    
+    	   
+
+           
     //Colisiones
  
     public void colisionPersonaje(Mago m) {
@@ -293,7 +310,7 @@ public class Juego extends InterfaceJuego {
         this.mago = new Mago(400, 300);
         this.cooldown = 0;
         this.juegoTerminado = false;
-        this.juegoIniciado = false; // Vuelve al menú principal
+        this.juegoIniciado = true; // Vuelve al menú principal
         this.killMur = 0;
         this.contMur = murcielagos.length; // 10 vivos al iniciar
         
