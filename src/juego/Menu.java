@@ -10,6 +10,7 @@ public class Menu {
     private Hechizo[] hechizos;
     private int hechizoSeleccionado = -1; // -1 = ninguno seleccionado
     private Image fondo;
+    private Image[] hechizo;
 
     public Menu(double x, double y, double ancho, double alto) {
         this.x = x;
@@ -18,6 +19,10 @@ public class Menu {
         this.alto = alto;
         this.fondo = Herramientas.cargarImagen("juego/img/madera.jpg");
         
+        this.hechizo = new Image[3];
+        this.hechizo[0] = Herramientas.cargarImagen("juego/img/apocalipsis-imagen.png");
+        this.hechizo[1] = Herramientas.cargarImagen("juego/img/misilMagico-imagen.png");
+        this.hechizo[2] = Herramientas.cargarImagen("juego/img/cora.png");
         inicializarHechizos();
     }
     
@@ -27,7 +32,7 @@ public class Menu {
         
         hechizos = new Hechizo[] {
             new Hechizo("Apocalipsis", x, hechizoBaseY, 120, 25, 55, Hechizo.TipoHechizo.APOCALIPSIS),
-            new Hechizo("Misil Magico", x, hechizoBaseY + espacioEntreHechizos, 120, 25, 25, Hechizo.TipoHechizo.MISIL_MAGICO),
+            new Hechizo("Misil Magico", x, hechizoBaseY + espacioEntreHechizos, 120, 25, 0, Hechizo.TipoHechizo.MISIL_MAGICO),
             new Hechizo("Curacion", x, hechizoBaseY + espacioEntreHechizos * 2, 120, 25, 15, Hechizo.TipoHechizo.CURACION)
         };
     }
@@ -100,6 +105,9 @@ public class Menu {
             entorno.escribirTexto(hechizos[i].getNombre() + " (" + (int)hechizos[i].getCostoMana() + " MP)", 
                                 x-50, hechizos[i].getY());
         }
+        entorno.dibujarImagen(hechizo[0], 975, 245, 0, 0.090);
+        entorno.dibujarImagen(hechizo[1], 975, 313, 0, 0.070);
+        entorno.dibujarImagen(hechizo[2], 975, 380, 0, 0.040);
     }
 
     public void verificarClick(int mouseX, int mouseY) {
