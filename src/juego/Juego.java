@@ -23,10 +23,10 @@ public class Juego extends InterfaceJuego {
     private int contMur; //contador de murcielagos
     public static int killMur; // Contador de muertes 
     private boolean win = false;
-    private int ronda = 1;
-    private int killsPorRonda = 10;
-    private int killsEnEstaRonda = 0;
-
+    private int ronda;
+    private int killsPorRonda;
+    private int killsEnEstaRonda;
+    private int ticksRonda;
 
 
     Juego() {
@@ -45,6 +45,11 @@ public class Juego extends InterfaceJuego {
         		}
        
         this.cooldown = 0;
+        this.ticksRonda = 100;
+        
+        this.ronda = 1;
+        this.killsPorRonda = 10;
+        this.killsEnEstaRonda = 0;
       
         this.menuInicial = new MenuInicial(600, 400, 1200, 800);
         this.menuMuerte = new MenuMuerte(600, 400, 1200, 800);
@@ -152,12 +157,23 @@ public class Juego extends InterfaceJuego {
     	       // Dibuja el mago una sola vez con su dirección actual
     	       mago.dibujar(entorno);
 
-    	       
+    	       //TIMERS
     	       if (cooldown > 0) 
       	    		cooldown--;
     	       
+    	       if (ticksRonda >0 && ronda <=4){
+    	    	   ticksRonda--;
+    	        	entorno.cambiarFont("Gabriola", 40, Color.RED);
+    	        	entorno.escribirTexto("Preparate para los enemigos", 250,150);
+    	    	   } else if(ticksRonda>0 && ronda ==5) {
+    	    		   ticksRonda--;
+       	        	entorno.cambiarFont("Gabriola", 40, Color.RED);
+       	        	entorno.escribirTexto("Preparate para la ultima ronda", 250,150);
+    	    	   }
+    	       
+    	       
     	       // Dibuja y mueve el murciélago
-    	       if(ronda <= 5)  // condicion para el respawn de los murcielagos
+    	       if(ronda <= 6 && ticksRonda == 0)  // condicion para el respawn de los murcielagos
     	       		{for (int i = 0; i < murcielagos.length; i++) { 
     	       			Murcielago m = murcielagos[i];
     	            
@@ -193,7 +209,7 @@ public class Juego extends InterfaceJuego {
     	       
     	       
                }   
-    	   if (ronda == 5 && mago.estaVivo() && !juegoTerminado ) {
+    	   if (ronda == 6 && mago.estaVivo() && !juegoTerminado ) {
     		   			win =true;		
     		   			menuVictoria.dibujar(entorno);    
     		   			if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
@@ -307,6 +323,8 @@ public class Juego extends InterfaceJuego {
             murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 175);
         }
         killsPorRonda += 5;
+        
+        
 }
     
     private void reiniciarJuego() {
@@ -337,8 +355,9 @@ public class Juego extends InterfaceJuego {
         killMur++; // Sube el contador de kills   	
         killsEnEstaRonda++;
         
-        if (killsEnEstaRonda >= killsPorRonda) {
+        if (killsEnEstaRonda >= killsPorRonda && ticksRonda == 0) {
             pasarARondaSiguiente();
+            ticksRonda = 100;
         }
       }
     }
@@ -349,8 +368,9 @@ public class Juego extends InterfaceJuego {
             killMur++; // Sube el contador de kills   	
             killsEnEstaRonda++;
             
-            if (killsEnEstaRonda >= killsPorRonda) {
+            if (killsEnEstaRonda >= killsPorRonda && ticksRonda == 0) {
                 pasarARondaSiguiente();
+                ticksRonda = 150;
             }
           }
     }
