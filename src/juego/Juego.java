@@ -7,7 +7,7 @@ import entorno.Herramientas;
 import entorno.InterfaceJuego;
 public class Juego extends InterfaceJuego {
 	
-    private Entorno entorno;
+	private Entorno entorno;
     private Mago mago; // Instancia de Mago
     private Menu menu;
     private Image fondo; // Instancia de Fondo
@@ -99,7 +99,7 @@ public class Juego extends InterfaceJuego {
     	           menu.verificarClick(entorno.mouseX(), entorno.mouseY());
     	       }
     	       
-    	       if (entorno.sePresionoBoton(entorno.BOTON_DERECHO)) {
+    	       if (entorno.sePresionoBoton(entorno.BOTON_DERECHO) ) {
     	    	    Hechizo hechizoSeleccionado = menu.getHechizoSeleccionado();
     	    	    if (hechizoSeleccionado != null) {
     	    	        // Ejecutar el hechizo y deseleccionarlo si se ejecuta exitosamente
@@ -108,8 +108,9 @@ public class Juego extends InterfaceJuego {
     	    	            menu.deseleccionarHechizo();
     	    	        }
     	    	    }
+    	    	    
     	    	}  
-    	       
+    	       System.out.println(killMur);
     	       menu.actualizarHechizos();
     	       
     	       menu.dibujarEfectosHechizos(entorno);
@@ -190,7 +191,7 @@ public class Juego extends InterfaceJuego {
     	       
     	       
                }   
-    	   if (ronda == 2 && mago.estaVivo() && !juegoTerminado ) {
+    	   if (ronda == 5 && mago.estaVivo() && !juegoTerminado ) {
     		   			win =true;		
     		   			menuVictoria.dibujar(entorno);    
     		   			if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
@@ -324,7 +325,7 @@ public class Juego extends InterfaceJuego {
         menuVictoria.deseleccionar();
         contMur = murcielagos.length;
     }
-    
+    	
     //Metodos eliminaciones
     private void eliminarMurcielago(int indice) {
     	if (indice >= 0 && indice < murcielagos.length && murcielagos[indice] != null) {
@@ -350,7 +351,6 @@ public class Juego extends InterfaceJuego {
             }
           }
     }
-    
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         Juego juego = new Juego();

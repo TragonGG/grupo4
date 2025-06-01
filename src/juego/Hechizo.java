@@ -55,10 +55,10 @@ public class Hechizo {
     private void cargarEfectoVisual() {
         switch (tipo) {
             case APOCALIPSIS:
-                this.efectoGif = Herramientas.cargarImagen("juego/img/apocalipsis.gif");
+                this.efectoGif = Herramientas.cargarImagen("juego/img/apocalipsis-v1.gif");
                 break;
             case MISIL_MAGICO:
-                this.efectoGif = Herramientas.cargarImagen("juego/img/MisilMagico.gif");
+                this.efectoGif = Herramientas.cargarImagen("juego/img/MisilMagico-v1.gif");
                 break;
             case CURACION:
                 this.efectoGif = Herramientas.cargarImagen("juego/img/curacion.gif");
@@ -133,7 +133,7 @@ public class Hechizo {
     
     public void dibujarEfecto(Entorno entorno) {
         if (mostrandoEfecto && efectoGif != null) {
-            entorno.dibujarImagen(efectoGif, efectoX, efectoY, 0, 1);
+            entorno.dibujarImagen(efectoGif, efectoX, efectoY, 0, 0.4);
         }
     }
     
