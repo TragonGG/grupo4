@@ -88,7 +88,7 @@ public class Juego extends InterfaceJuego {
     	       }
     	       return;
     	   }     	   
-    	   if (mago.estaVivo() && !juegoTerminado) {
+    	   if (mago.estaVivo() && !juegoTerminado && win == false) {
     	       // Procesamiento de un instante de tiempo
     	       entorno.dibujarImagen(fondo, 311, 400, 0, 1); // Dibuja el fondo 1
     	       menu.dibujar(entorno, mago);
@@ -154,18 +154,18 @@ public class Juego extends InterfaceJuego {
       	    		cooldown--;
     	       
     	       // Dibuja y mueve el murciélago
-    	       if(killMur <50) // condicion para el respawn de los murcielagos
+    	       if(ronda <= 5)  // condicion para el respawn de los murcielagos
     	       		{for (int i = 0; i < murcielagos.length; i++) { 
     	       			Murcielago m = murcielagos[i];
     	            
     	       			if (m == null) {
 	    	            	
-	    	            	if (killMur <= 40) {  	            		
+	    	            	  	            		
 	    	            		murcielagos[i] = new Murcielago(100, 50);
 	    	            		murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 50);
 	    	            		contMur++;
     	                    
-	    	            		}
+	    	            		
 	    	            	continue; // Si el murciélago es null, salta a la siguiente iteración
     	       			}
     	            
@@ -189,10 +189,9 @@ public class Juego extends InterfaceJuego {
     	       this.aba = false;
     	       
     	       
-               }
-    	   
-    	   if (killMur >= 50 && mago.estaVivo() && !juegoTerminado ) {
-    		   			win =true;
+               }   
+    	   if (ronda == 2 && mago.estaVivo() && !juegoTerminado ) {
+    		   			win =true;		
     		   			menuVictoria.dibujar(entorno);    
     		   			if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
     		    	           menuVictoria.verificarClick(entorno.mouseX(), entorno.mouseY());
@@ -304,21 +303,27 @@ public class Juego extends InterfaceJuego {
             murcielagos[i] = new Murcielago(100, 50);
             murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 175);
         }
-    }
+        killsPorRonda += 5;
+}
     
     private void reiniciarJuego() {
         this.mago = new Mago(400, 300);
         this.cooldown = 0;
         this.juegoTerminado = false;
-        this.juegoIniciado = true; // Vuelve al menú principal
-        this.killMur = 0;
-        this.contMur = murcielagos.length; // 10 vivos al iniciar
-        
-        
+        this.win = false;
+        killMur = 0;
+        killsEnEstaRonda = 0;
+        ronda = 1;
+
+        // Regenerar todos los murciélagos
         for (int i = 0; i < murcielagos.length; i++) {
             murcielagos[i] = new Murcielago(100, 50);
+            murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 75);
         }
-	   }
+        
+        menuVictoria.deseleccionar();
+        contMur = murcielagos.length;
+    }
     
     //Metodos eliminaciones
     private void eliminarMurcielago(int indice) {

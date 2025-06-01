@@ -99,4 +99,8 @@ public class MenuVictoria {
     public boolean isIniciarSeleccionado() {
         return iniciarSeleccionado;
     }
+    
+    public void deseleccionar() {
+        iniciarSeleccionado = false;
+    }
 }
