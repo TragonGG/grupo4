@@ -7,7 +7,7 @@ import entorno.Herramientas;
 import entorno.InterfaceJuego;
 public class Juego extends InterfaceJuego {
 	
-	private Entorno entorno;
+    private Entorno entorno;
     private Mago mago; // Instancia de Mago
     private Menu menu;
     private Image fondo; // Instancia de Fondo
@@ -94,23 +94,25 @@ public class Juego extends InterfaceJuego {
     	       menu.dibujar(entorno, mago);
     	       mago.regenerarMana();
     	       
-
-    	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
-    	           menu.verificarClick(entorno.mouseX(), entorno.mouseY());
-    	       }
+    	       boolean clickEnMenu = false;
     	       
-    	       if (entorno.sePresionoBoton(entorno.BOTON_DERECHO) ) {
-    	    	    Hechizo hechizoSeleccionado = menu.getHechizoSeleccionado();
-    	    	    if (hechizoSeleccionado != null) {
-    	    	        // Ejecutar el hechizo y deseleccionarlo si se ejecuta exitosamente
-    	    	        boolean hechizoEjecutado = hechizoSeleccionado.ejecutarEn(mago, entorno.mouseX(), entorno.mouseY(), murcielagos, this);
-    	    	        if (hechizoEjecutado) {
-    	    	            menu.deseleccionarHechizo();
+    	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+    	    	    // Detectar si se hizo clic dentro del menú
+    	    	    if (entorno.mouseX() >= 1060) {
+    	    	        clickEnMenu = true;
+    	    	        menu.verificarClick(entorno.mouseX(), entorno.mouseY());
+    	    	    } else {
+    	    	        // Si hay hechizo seleccionado y se clickea fuera del menú, se lanza
+    	    	        Hechizo hechizoSeleccionado = menu.getHechizoSeleccionado();
+    	    	        if (hechizoSeleccionado != null) {
+    	    	            boolean hechizoEjecutado = hechizoSeleccionado.ejecutarEn(mago, entorno.mouseX(), entorno.mouseY(), murcielagos, this);
+    	    	            if (hechizoEjecutado) {
+    	    	                menu.deseleccionarHechizo();
+    	    	            }
     	    	        }
     	    	    }
-    	    	    
-    	    	}  
-    	       System.out.println(killMur);
+    	    	}
+    	    	 
     	       menu.actualizarHechizos();
     	       
     	       menu.dibujarEfectosHechizos(entorno);
@@ -314,6 +316,7 @@ public class Juego extends InterfaceJuego {
         this.win = false;
         killMur = 0;
         killsEnEstaRonda = 0;
+        killsPorRonda = 10;
         ronda = 1;
 
         // Regenerar todos los murciélagos
@@ -351,6 +354,7 @@ public class Juego extends InterfaceJuego {
             }
           }
     }
+    
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         Juego juego = new Juego();
