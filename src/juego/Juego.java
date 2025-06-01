@@ -21,13 +21,17 @@ public class Juego extends InterfaceJuego {
     private int contMur; //contador de murcielagos
     public static int killMur; // Contador de muertes 
     private boolean win = false;
+    private int ronda = 1;
+    private int killsPorRonda = 10;
+    private int killsEnEstaRonda = 0;
+
 
 
     Juego() {
         this.entorno = new Entorno(this, "Proyecto para TP", 1200, 800);
         this.mago = new Mago(400, 300); // 
         this.fondo = Herramientas.cargarImagen("juego/img/fondojuego.png"); //Carga el fondo
-        
+
         
         this.murcielagos = new Murcielago[10];
         for (int i = 0; i < murcielagos.length;i++) {
@@ -63,7 +67,9 @@ public class Juego extends InterfaceJuego {
     }
     
     public void tick() {
+    	
     	   if (!juegoIniciado) {
+    		   
     	       // Mostrar menú inicial
     	       menuInicial.dibujar(entorno);
     	       
@@ -71,11 +77,12 @@ public class Juego extends InterfaceJuego {
     	           menuInicial.verificarClick(entorno.mouseX(), entorno.mouseY());
     	           if (menuInicial.isIniciarSeleccionado()) {
     	               juegoIniciado = true;
+    	               
     	           }
     	          
     	       }
     	       return;
-    	   } 
+    	   }     	   
     	   if (mago.estaVivo() && !juegoTerminado) {
     	       // Procesamiento de un instante de tiempo
     	       entorno.dibujarImagen(fondo, 311, 400, 0, 1); // Dibuja el fondo 1
@@ -111,7 +118,8 @@ public class Juego extends InterfaceJuego {
     	           this.colisionPersonajeRoca(mago, rocas[i]);
     	       }
 
-    	       
+    		   entorno.cambiarFont(null, 20, Color.WHITE);
+    		   entorno.escribirTexto("Ronda: " + ronda, 10, 30);
     	       // Lógica de movimiento con prioridad de teclas
     	       // Si se presionan múltiples teclas, la última comprobada tendrá prioridad
     	       boolean seMueve = false;
@@ -175,13 +183,14 @@ public class Juego extends InterfaceJuego {
     	       this.der = false;
     	       this.aba = false;
     	       
-    	       if (contMur == 0) {
+    	       if (killMur == 50) {
                    if (win = true);
                          //entorno.colorFondo(Color.BLACK);
                             entorno.cambiarFont(null, 50, Color.RED);
                             entorno.escribirTexto("¡HAS GANADO!", 400, 350);
                             entorno.cambiarFont(null, 25, Color.WHITE);
-                            entorno.escribirTexto("Sos re capo", 400, 400);
+                            entorno.escribirTexto("Sos re capo", 450, 400);
+                            
                 }
                //Detecta si el mago muere
                } else {
@@ -269,6 +278,17 @@ public class Juego extends InterfaceJuego {
 
     //Metodos Menu
     
+    private void pasarARondaSiguiente() {
+        ronda++;
+        killsEnEstaRonda = 0;
+        contMur = murcielagos.length;
+
+        for (int i = 0; i < murcielagos.length; i++) {
+            murcielagos[i] = new Murcielago(100, 50);
+            murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 175);
+        }
+    }
+    
     private void reiniciarJuego() {
         this.mago = new Mago(400, 300);
         this.cooldown = 0;
@@ -285,16 +305,28 @@ public class Juego extends InterfaceJuego {
     
     //Metodos eliminaciones
     private void eliminarMurcielago(int indice) {
+    	if (indice >= 0 && indice < murcielagos.length && murcielagos[indice] != null) {
         murcielagos[indice] = null; // Elimina el murciélago
         contMur--; // Baja el contador de Murcielagos vivos
         killMur++; // Sube el contador de kills   	
+        killsEnEstaRonda++;
+        
+        if (killsEnEstaRonda >= killsPorRonda) {
+            pasarARondaSiguiente();
+        }
+      }
     }
     public void eliminarMurcielagoPublico(int indice) {
-        if (indice >= 0 && indice < murcielagos.length && murcielagos[indice] != null) {
+    	if (indice >= 0 && indice < murcielagos.length && murcielagos[indice] != null) {
             murcielagos[indice] = null; // Elimina el murciélago
             contMur--; // Baja el contador de Murcielagos vivos
-            killMur++; // Sube el contador de kills
-        }
+            killMur++; // Sube el contador de kills   	
+            killsEnEstaRonda++;
+            
+            if (killsEnEstaRonda >= killsPorRonda) {
+                pasarARondaSiguiente();
+            }
+          }
     }
     
     @SuppressWarnings("unused")
