@@ -22,15 +22,15 @@ public class Juego extends InterfaceJuego {
     private boolean juegoIniciado = false;
     private boolean juegoTerminado = false;
     private boolean juegoEnPausa = false;
-    private boolean recompensa = false;
+    private boolean recompensa = false; // Condicion si se obtuvo recompensa
     private int cooldown; //Periodo de gracia para no recibir daño
     private int contMur; //contador de murcielagos
     public static int killMur; // Contador de muertes 
     private boolean win = false;
-    private int ronda;
-    private int killsPorRonda;
-    private int killsEnEstaRonda;
-    private int ticksRonda;
+    private int ronda; // Contador de ronda en la que vas
+    private int killsPorRonda; //Kills necesarias para avanzar de ronda
+    private int killsEnEstaRonda; //Kills que llevas en la ronda
+    private int ticksRonda; // Contador de ticks
 
 
     Juego() {
@@ -82,7 +82,7 @@ public class Juego extends InterfaceJuego {
     
     public void tick() {    	
     	   if (!juegoIniciado) {   		   
-    	       // Mostrar menú inicial
+    	       // MENU INICIAL 
     	       menuInicial.dibujar(entorno);
     	       
     	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
@@ -102,10 +102,10 @@ public class Juego extends InterfaceJuego {
     	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
     	           menuRecompensa.verificarClickRecompensa(entorno.mouseX(), entorno.mouseY(), mago); 	          
     	           recompensa = true; // Se marca como usada la recompensa
-	               juegoEnPausa = false;
+	               juegoEnPausa = false; 
 	               ticksRonda = 0; // Da tiempo antes de que aparezcan enemigos
-	               ronda = 4;
-	               pasarARondaSiguiente();
+	               ronda = 4; 
+	               pasarARondaSiguiente(); //Reinicio de ronda N5
     	       }
     	       return; // Importante: evita que se dibuje el juego mientras está este menú
     	   }
@@ -194,7 +194,7 @@ public class Juego extends InterfaceJuego {
     	    	   		entorno.escribirTexto("Preparate para la ultima ronda", 250,150);
     	    	   	}
     	           	       
-    	    	   // Dibuja y mueve el murciélago
+    	    	   // MURCIELAGO - MOVIMIENTO, ELIMINACION, CREACION DE NUEVOS MURC, COLISIONES.
     	    	   if(ronda <= 11 && ticksRonda == 0 && juegoEnPausa == false)  // condicion para el respawn de los murcielagos
     	       			{for (int i = 0; i < murcielagos.length; i++) { 
     	       				Murcielago m = murcielagos[i];
@@ -225,6 +225,7 @@ public class Juego extends InterfaceJuego {
     	       			}
     	       		} 
     	       }   	       
+    	       
     	       //Asigna el booleano para las colisiones
     	       this.arr = false;
     	       this.izq = false;
@@ -232,6 +233,7 @@ public class Juego extends InterfaceJuego {
     	       this.aba = false; 	       
                }
     	   
+    	   //DETECTA SI ES UNA VICTORIA
     	   if (ronda > 10 && mago.estaVivo() && !juegoTerminado ) {
     		   			win =true;		
     		   			menuVictoria.dibujar(entorno);    
@@ -244,7 +246,7 @@ public class Juego extends InterfaceJuego {
     		    	           menuVictoria.verificarClickSalir(entorno.mouseX(), entorno.mouseY());
     		   			}
                                
-           //Detecta si el mago muere
+           //DETECTA SI EL MAGO MUERE
            } else if(!mago.estaVivo()) {
                juegoTerminado = true;
                menuMuerte.dibujar(entorno);
@@ -258,7 +260,7 @@ public class Juego extends InterfaceJuego {
                }
            }
     }       
-    //Colisiones
+    //COLISIONES
  
     public void colisionPersonaje(Mago m) {
         // Borde izquierdo
@@ -344,7 +346,7 @@ public class Juego extends InterfaceJuego {
 }
     
     private void reiniciarJuego() {
-        this.mago = new Mago(400, 300);
+        this.mago = new Mago(400, 300); //Reinicio de las instancias influyentes en la logica y jugabilidad
         this.cooldown = 0;
         this.juegoTerminado = false;
         this.win = false;
@@ -353,7 +355,7 @@ public class Juego extends InterfaceJuego {
         killsPorRonda = 10;
         ronda = 1;
         recompensa = false; 
-        menuRecompensa.reiniciarEstado();
+        menuRecompensa.reiniciarEstado(); //setter para los estado del menuRecompensa
         
         // Reset murciélagos
         for (int i = 0; i < murcielagos.length; i++) {

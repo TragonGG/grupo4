@@ -12,7 +12,7 @@ public class MenuVictoria {
     private Image boton, fondo;
 
 
-    // Posición exacta del botón "Reinciar partida"
+    // Posición exacta del botón "Volver a jugar"
     private double iniciarX;
     private double iniciarY;
     

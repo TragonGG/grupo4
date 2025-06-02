@@ -43,6 +43,7 @@ public class Mago {
     	this.bordInf = this.y + this.alto / 3.5;
     } 
     
+    //MOVIMIENTO Y COLISIONES
     public void actualizarBordes() {
     	this.bordIz = this.x - this.ancho / 3;
     	this.bordDer = this.x + this.ancho / 2;
@@ -78,12 +79,11 @@ public class Mago {
     public String getDireccionActual() {
         return direccionActual;
     }
-
+    
     public void setDireccionActual(String direccion) {
         this.direccionActual = direccion;
     }
 
-    
     
     public void dibujar(Entorno entorno) {
         // Dibujar el mago
@@ -140,6 +140,7 @@ public class Mago {
         recuperarMana(0.2);
     }
     
+    //getters 
     public double getX() {
         return x;
     }

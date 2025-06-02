@@ -12,8 +12,6 @@ public class Murcielago {
 	private Image imagen;
 	private double velocidad;
 	private double escala;
-	private boolean vida;
-	private boolean primerMovimiento;
 	public double bordIz, bordSup, bordDer, bordInf;
 
 	public Murcielago(double x, double y) {
@@ -21,11 +19,7 @@ public class Murcielago {
 		   	
 		   	this.escala = 0.3;
 		    this.velocidad = 2.0;
-		    this.imagen = Herramientas.cargarImagen("juego/img/bat.gif");
-		    		    
-		    this.primerMovimiento = true;
-		    
-		    this.vida = true;
+		    this.imagen = Herramientas.cargarImagen("juego/img/bat.gif");    		    
 		    		    
 	        this.alto = this.imagen.getHeight(null) * this.escala;
 	        this.ancho = this.imagen.getWidth(null) * this.escala;
@@ -90,10 +84,10 @@ public class Murcielago {
 	        this.x = xOriginal;
 	        this.y = yOriginal;
 
-	        // Retrocede 5 píxeles en dirección contraria
+	        //Distancia del paso nuevo hipotenusa
 	        double distanciaMovimiento = Math.sqrt(pasoX * pasoX + pasoY * pasoY);
 
-	        // Retroceso
+	        // Retroceso en 2 pixeles
 	        double retrocesoX = - (pasoX / distanciaMovimiento) * 2;
 	        double retrocesoY = - (pasoY / distanciaMovimiento) * 2;
 

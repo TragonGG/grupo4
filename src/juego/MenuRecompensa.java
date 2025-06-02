@@ -9,8 +9,8 @@ import entorno.Herramientas;
 public class MenuRecompensa {
 	    private int x, y;
 	    private int ancho, alto,escala;
-	    public boolean rDurabilidad;
-	    private boolean recompensaElegida;
+	    public boolean rDurabilidad; //Condicion de mejora de durabilidad
+	    private boolean recompensaElegida; // Condicion si eligio una mejora
 	    private boolean iniciarSeleccionado;
 	    private Image fondo,boton;
 	
@@ -18,7 +18,7 @@ public class MenuRecompensa {
 	    private double vidaX;
 	    private double vidaY;
 	    
-	    //Posion de "Mas Mana"
+	    //Posición exacta de "Mas Mana"
 	    private double manaX;
 	    private double manaY;
 	    // Posición exacta del botón "Mas velocidad"

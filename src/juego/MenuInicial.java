@@ -8,7 +8,7 @@ import entorno.Herramientas;
 
 public class MenuInicial {
     private double x, y, ancho, alto, escala;
-    private boolean iniciarSeleccionado;
+    private boolean iniciarSeleccionado; //Condicion de seleccion del boton
     private Image boton, fondo;
 
 
