@@ -67,32 +67,27 @@ public class Hechizo {
     }
     
     public boolean ejecutarEn(Mago mago, double targetX, double targetY, Murcielago[] murcielagos, Juego juego) {
-        if (!mago.usarMana(costoMana)) {
-            System.out.println("No hay suficiente mana para " + nombre);
+        if (!mago.usarMana(costoMana)) {       
             return false;
         }
         
      // Aplica el efecto específico según el tipo de hechizo
         switch (tipo) {
             case APOCALIPSIS:
-                System.out.println("¡APOCALIPSIS DESATADO! Daño masivo en área");
                 iniciarEfecto(targetX, targetY, 60);
                 eliminarMurcielagosEnArea(targetX, targetY, murcielagos, juego);
                 break;
                 
             case MISIL_MAGICO:
-                System.out.println("¡Misil Mágico lanzado! Proyectil dirigido");
                 iniciarEfecto(targetX, targetY, 30);
                 eliminarMurcielagosEnArea(targetX, targetY, murcielagos, juego);
                 break;
                 
             case CURACION:
-                System.out.println("¡Curación activada! Restaurando vida");
                 mago.curar(30);
                 iniciarEfecto(mago.getX(), mago.getY(), 40);
                 break;
-        }
-        
+        }      
         return true; 
     }
     //Elimina todos los murciélagos que estén dentro del área de efecto del hechizo.
@@ -102,8 +97,7 @@ public class Hechizo {
         for (int i = 0; i < murcielagos.length; i++) {
             if (murcielagos[i] != null) {
             	if (estaEnRango(centroX, centroY, murcielagos[i].x, murcielagos[i].y)) {
-                    System.out.println("¡Murciélago eliminado por " + nombre + "!");
-                    juego.eliminarMurcielagoPublico(i);
+                    juego.eliminarMurcielago(i);
                 }
             }
         }
@@ -138,8 +132,6 @@ public class Hechizo {
             entorno.dibujarImagen(efectoGif, efectoX, efectoY, 0, 0.4);
         }
     }
-    
-    
     //para mandarselo a otras clases
    
     public boolean estaSeleccionado() { 
@@ -184,8 +176,7 @@ public class Hechizo {
     public double getRadioEfecto() {
     	return radioEfecto; 
     	}
-    
-    
+     
     public boolean contienePunto(double mouseX, double mouseY) {
         return mouseX >= (x - ancho/2) && mouseX <= (x + ancho/2) &&
                mouseY >= (y - alto/2) && mouseY <= (y + alto/2);

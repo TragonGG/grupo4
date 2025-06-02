@@ -28,12 +28,11 @@ public class Mago {
         this.manaMaximo = 100;
         this.manaActual = 100;
         
-        this.imagen = new Image[5];
+        this.imagen = new Image[4];
         this.imagen[0] = Herramientas.cargarImagen("juego/img/magoIzquierdaVFinal.png");
         this.imagen[1] = Herramientas.cargarImagen("juego/img/magoDerechaVFinal.png");
         this.imagen[2] = Herramientas.cargarImagen("juego/img/magoArribaVFinal.png");
         this.imagen[3] = Herramientas.cargarImagen("juego/img/magoAbajoVFinal.png");
-        this.imagen[4] = Herramientas.cargarImagen("juego/img/magoBomba-V1.gif");
         
         this.alto = this.imagen[1].getHeight(null) * this.escala;
         this.ancho = this.imagen[1].getWidth(null) * this.escala;

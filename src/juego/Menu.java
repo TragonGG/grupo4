@@ -115,10 +115,10 @@ public class Menu {
         double hechizoAlto = 40;
 
         for (int i = 0; i < hechizos.length; i++) {
-            if (mouseX >= hechizos[i].getX() - hechizoAncho/2 && 
-                mouseX <= hechizos[i].getX() + hechizoAncho/2 &&
-                mouseY >= hechizos[i].getY() - hechizoAlto/2 && 
-                mouseY <= hechizos[i].getY() + hechizoAlto/2) {
+            if (mouseX >= hechizos[i].getX() - hechizoAncho / 2 && 
+                mouseX <= hechizos[i].getX() + hechizoAncho / 2 &&
+                mouseY >= hechizos[i].getY() - hechizoAlto / 2 && 
+                mouseY <= hechizos[i].getY() + hechizoAlto / 2) {
                 
                 // Deseleccionar todos los hechizos
                 for (int j = 0; j < hechizos.length; j++) {

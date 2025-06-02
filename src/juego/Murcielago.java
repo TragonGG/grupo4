@@ -16,32 +16,25 @@ public class Murcielago {
 	private boolean primerMovimiento;
 	public double bordIz, bordSup, bordDer, bordInf;
 
-	
-	
 	public Murcielago(double x, double y) {
 		   	this.generarPosicionAleatoria();
 		   	
 		   	this.escala = 0.3;
 		    this.velocidad = 2.0;
 		    this.imagen = Herramientas.cargarImagen("juego/img/bat.gif");
-		    
-		    
+		    		    
 		    this.primerMovimiento = true;
 		    
 		    this.vida = true;
-		    
-		    
+		    		    
 	        this.alto = this.imagen.getHeight(null) * this.escala;
 	        this.ancho = this.imagen.getWidth(null) * this.escala;
 		    
 	        this.bordIz = this.x - this.ancho / 10;
 	    	this.bordDer = this.x + this.ancho / 10;
 	    	this.bordSup = this.y - this.alto / 10;
-	    	this.bordInf = this.y + this.alto / 10;
-
-		    
+	    	this.bordInf = this.y + this.alto / 10;	    
 	}
-	
 	
 	public void actualizarBordes() {
     	this.bordIz = this.x - this.ancho / 10;
@@ -50,16 +43,11 @@ public class Murcielago {
     	this.bordInf = this.y + this.alto / 10;
     }
     
-		 
-	
-	
 	//Dibuja a el Murcielago
 	public void dibujar(Entorno entorno) {
 		entorno.dibujarImagen(imagen, x, y, 0,escala);
 	}
-	
-	
-	
+		
 	//Metodo para direccionar al murcielago
 	public double[] dirreccionHacia(Mago m) {
 	    double dx = m.getX() - this.x;
@@ -76,8 +64,7 @@ public class Murcielago {
 	    }
 	    return new double[] {0, 0};
 	}
-	
-		
+			
 	//Metodo para mover el murcielago
 	public boolean moverHacia(Mago mago, Murcielago[] murcielagos, int murcielagoIndice) {
 	    double[] direccion = this.dirreccionHacia(mago);
@@ -129,9 +116,7 @@ public class Murcielago {
 	        }
 	    }
 	    return false;
-	}
-	
-	
+	}	
 	//Verificacion de colisioens
 	private boolean seSuperponeCon(Murcielago otro) {
 	    return this.bordDer > otro.bordIz &&
@@ -140,8 +125,6 @@ public class Murcielago {
 	           this.bordSup < otro.bordInf;
 	}
 	
-
-
 	private void generarPosicionAleatoria() {
 	    int lado = (int) (Math.random() * 4); // 0 = arriba, 1 = abajo, 2 = izquierda, 3 = derecha
 
@@ -193,8 +176,5 @@ public class Murcielago {
 	            posicionValida = true;
 	        }
 	    }
-	}
-	
-
-	
+	}	
 }

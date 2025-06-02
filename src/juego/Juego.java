@@ -76,25 +76,20 @@ public class Juego extends InterfaceJuego {
         this.izq = false;
         this.der = false;
         this.aba = false;
-       
-        
+   
         this.entorno.iniciar();
     }
     
-    public void tick() {
-    	
-    	   if (!juegoIniciado) {
-    		   
+    public void tick() {    	
+    	   if (!juegoIniciado) {   		   
     	       // Mostrar menú inicial
     	       menuInicial.dibujar(entorno);
     	       
     	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
     	           menuInicial.verificarClick(entorno.mouseX(), entorno.mouseY());
     	           if (menuInicial.isIniciarSeleccionado()) {
-    	               juegoIniciado = true;
-    	               
-    	           }
-    	          
+    	               juegoIniciado = true;   	               
+    	           }   	          
     	       }
     	       return;
     	   }     	   
@@ -114,17 +109,14 @@ public class Juego extends InterfaceJuego {
     	       }
     	       return; // Importante: evita que se dibuje el juego mientras está este menú
     	   }
-    	   
-    	   
+    	     	   
     	   //JUEGO
     	   if (mago.estaVivo() && !juegoTerminado && win == false) {
     	       // Procesamiento de un instante de tiempo
     	       entorno.dibujarImagen(fondo, 311, 400, 0, 1); // Dibuja el fondo 1
     	       menu.dibujar(entorno, mago);
-    	       mago.regenerarMana();
-    	       
+    	       mago.regenerarMana();    	       
     	       boolean clickEnMenu = false;
-    	       
     	       
     	       //MENU DE HECHIZOS
     	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
@@ -165,8 +157,7 @@ public class Juego extends InterfaceJuego {
     		   // Lógica de movimiento con prioridad de teclas
     	       // Si se presionan múltiples teclas, la última comprobada tendrá prioridad
     	       boolean seMueve = false;
-    	 
-    	       
+    	    	       
     	       if(juegoEnPausa == false){
    
     	    	   if (entorno.estaPresionada('W') && !this.arr) { // Tecla W para mover arriba
@@ -202,8 +193,7 @@ public class Juego extends InterfaceJuego {
     	    	   		entorno.cambiarFont("Gabriola", 40, Color.RED);
     	    	   		entorno.escribirTexto("Preparate para la ultima ronda", 250,150);
     	    	   	}
-    	       
-    	       
+    	           	       
     	    	   // Dibuja y mueve el murciélago
     	    	   if(ronda <= 11 && ticksRonda == 0 && juegoEnPausa == false)  // condicion para el respawn de los murcielagos
     	       			{for (int i = 0; i < murcielagos.length; i++) { 
@@ -234,30 +224,14 @@ public class Juego extends InterfaceJuego {
     	       				murcielagos[i].dibujar(entorno);
     	       			}
     	       		} 
-    	       }
-    	       
+    	       }   	       
     	       //Asigna el booleano para las colisiones
     	       this.arr = false;
     	       this.izq = false;
     	       this.der = false;
-    	       this.aba = false;
-    	       
-    	       
+    	       this.aba = false; 	       
                }
     	   
-    	   
-    	   
-    	   //MENU DE RECOMPENSA
-//    	   if(recompensa == false && mago.estaVivo() && !juegoTerminado) {
-//    		 	juegoEnPausa = true;
-//    		 	entorno.cambiarFont(null, 40, Color.RED);
-//   	   			entorno.escribirTexto("ESTAS A LA MITAD DE TU CAMINO", 250,150);
-//   	   			juegoEnPausa = false;
-//   	   			recompensa = true;
-//   	   			ticksRonda = 100;
-//    	   }
-    	   
-    	   //MENU DE VICTORIA
     	   if (ronda > 10 && mago.estaVivo() && !juegoTerminado ) {
     		   			win =true;		
     		   			menuVictoria.dibujar(entorno);    
@@ -269,8 +243,7 @@ public class Juego extends InterfaceJuego {
     		    	               }
     		    	           menuVictoria.verificarClickSalir(entorno.mouseX(), entorno.mouseY());
     		   			}
-                        
-            
+                               
            //Detecta si el mago muere
            } else if(!mago.estaVivo()) {
                juegoTerminado = true;
@@ -284,11 +257,7 @@ public class Juego extends InterfaceJuego {
     	           }	
                }
            }
-    }
-    
-    	   
-
-           
+    }       
     //Colisiones
  
     public void colisionPersonaje(Mago m) {
@@ -371,9 +340,7 @@ public class Juego extends InterfaceJuego {
             murcielagos[i] = new Murcielago(100, 50);
             murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 175);
         }
-        killsPorRonda += 5;
-        
-        
+        killsPorRonda += 5;    
 }
     
     private void reiniciarJuego() {
@@ -398,7 +365,7 @@ public class Juego extends InterfaceJuego {
     }
     	
     //Metodos eliminaciones
-    private void eliminarMurcielago(int indice) {
+    public void eliminarMurcielago(int indice) {
     	if (indice >= 0 && indice < murcielagos.length && murcielagos[indice] != null) {
         murcielagos[indice] = null; // Elimina el murciélago
         contMur--; // Baja el contador de Murcielagos vivos
@@ -410,21 +377,7 @@ public class Juego extends InterfaceJuego {
             ticksRonda = 100;
         }
       }
-    }
-    public void eliminarMurcielagoPublico(int indice) {
-    	if (indice >= 0 && indice < murcielagos.length && murcielagos[indice] != null) {
-            murcielagos[indice] = null; // Elimina el murciélago
-            contMur--; // Baja el contador de Murcielagos vivos
-            killMur++; // Sube el contador de kills   	
-            killsEnEstaRonda++;
-            
-            if (killsEnEstaRonda >= killsPorRonda && ticksRonda == 0) {
-                pasarARondaSiguiente();
-                ticksRonda = 150;
-            }
-          }
-    }
-    
+    }    
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         Juego juego = new Juego();
