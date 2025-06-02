@@ -1,4 +1,5 @@
 package juego;
+
 import java.awt.Color;
 import java.awt.Image;
 
@@ -17,8 +18,11 @@ public class Juego extends InterfaceJuego {
     private MenuInicial menuInicial;
     private MenuMuerte menuMuerte;
     private MenuVictoria menuVictoria;
+    private MenuRecompensa menuRecompensa;
     private boolean juegoIniciado = false;
     private boolean juegoTerminado = false;
+    private boolean juegoEnPausa = false;
+    private boolean recompensa = false;
     private int cooldown; //Periodo de gracia para no recibir daño
     private int contMur; //contador de murcielagos
     public static int killMur; // Contador de muertes 
@@ -47,13 +51,14 @@ public class Juego extends InterfaceJuego {
         this.cooldown = 0;
         this.ticksRonda = 100;
         
-        this.ronda = 1;
+        this.ronda = 5;
         this.killsPorRonda = 10;
         this.killsEnEstaRonda = 0;
       
         this.menuInicial = new MenuInicial(600, 400, 1200, 800);
         this.menuMuerte = new MenuMuerte(600, 400, 1200, 800);
         this.menuVictoria = new MenuVictoria(600, 400, 1200, 800);
+        this.menuRecompensa = new MenuRecompensa(600, 400, 1200, 800);
 
         
         rocas = new Obstaculos[5];
@@ -93,6 +98,25 @@ public class Juego extends InterfaceJuego {
     	       }
     	       return;
     	   }     	   
+    	   
+    	// MENU DE RECOMPENSA - se activa solo en ronda 5
+    	   if (ronda == 5 && !recompensa && mago.estaVivo() && !juegoTerminado) {
+    	       juegoEnPausa = true;
+    	       menuRecompensa.dibujar(entorno);
+
+    	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+    	           menuRecompensa.verificarClickRecompensa(entorno.mouseX(), entorno.mouseY(), mago); 	          
+    	           recompensa = true; // Se marca como usada la recompensa
+	               juegoEnPausa = false;
+	               ticksRonda = 0; // Da tiempo antes de que aparezcan enemigos
+	               ronda = 4;
+	               pasarARondaSiguiente();
+    	       }
+    	       return; // Importante: evita que se dibuje el juego mientras está este menú
+    	   }
+    	   
+    	   
+    	   //JUEGO
     	   if (mago.estaVivo() && !juegoTerminado && win == false) {
     	       // Procesamiento de un instante de tiempo
     	       entorno.dibujarImagen(fondo, 311, 400, 0, 1); // Dibuja el fondo 1
@@ -101,6 +125,8 @@ public class Juego extends InterfaceJuego {
     	       
     	       boolean clickEnMenu = false;
     	       
+    	       
+    	       //MENU DE HECHIZOS
     	       if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
     	    	    // Detectar si se hizo clic dentro del menú
     	    	    if (entorno.mouseX() >= 1060) {
@@ -130,77 +156,86 @@ public class Juego extends InterfaceJuego {
     	           rocas[i].dibujar(entorno);	
     	           this.colisionPersonajeRoca(mago, rocas[i]);
     	       }
-
+    	       
+    	       //RONDAS
     		   entorno.cambiarFont(null, 20, Color.WHITE);
     		   entorno.escribirTexto("Ronda: " + ronda, 10, 30);
-    	       // Lógica de movimiento con prioridad de teclas
+    	      
+    		   
+    		   // Lógica de movimiento con prioridad de teclas
     	       // Si se presionan múltiples teclas, la última comprobada tendrá prioridad
     	       boolean seMueve = false;
-    	    
-    	       if (entorno.estaPresionada('W') && !this.arr) { // Tecla W para mover arriba
-    	           mago.moverArriba();
-    	           seMueve = true;
-    	       }
-    	       if (entorno.estaPresionada('S') && !this.aba) { // Tecla S para mover abajo
-    	           mago.moverAbajo();
-    	           seMueve = true;
-    	       }
-    	       if (entorno.estaPresionada('A') && !this.izq) { // Tecla A para mover izquierda
-    	           mago.moverIzquierda();
-    	           seMueve = true;
-    	       }
-    	       if (entorno.estaPresionada('D') && !this.der) { // Tecla D para mover derecha
-    	           mago.moverDerecha();
-    	           seMueve = true;
-    	       }
-    	           	       
-    	       // Dibuja el mago una sola vez con su dirección actual
-    	       mago.dibujar(entorno);
-
-    	       //TIMERS
-    	       if (cooldown > 0) 
-      	    		cooldown--;
+    	 
     	       
-    	       if (ticksRonda >0 && ronda <=4){
-    	    	   ticksRonda--;
-    	        	entorno.cambiarFont("Gabriola", 40, Color.RED);
-    	        	entorno.escribirTexto("Preparate para los enemigos", 250,150);
-    	    	   } else if(ticksRonda>0 && ronda ==5) {
-    	    		   ticksRonda--;
-       	        	entorno.cambiarFont("Gabriola", 40, Color.RED);
-       	        	entorno.escribirTexto("Preparate para la ultima ronda", 250,150);
+    	       if(juegoEnPausa == false){
+   
+    	    	   if (entorno.estaPresionada('W') && !this.arr) { // Tecla W para mover arriba
+    	    		   mago.moverArriba();
+    	    		   seMueve = true;
     	    	   }
+    	    	   if (entorno.estaPresionada('S') && !this.aba) { // Tecla S para mover abajo
+    	    		   mago.moverAbajo();
+    	    		   seMueve = true;
+    	    	   }
+    	    	   if (entorno.estaPresionada('A') && !this.izq) { // Tecla A para mover izquierda
+    	    		   mago.moverIzquierda();
+    	    		   seMueve = true;
+    	    	   }
+    	    	   if (entorno.estaPresionada('D') && !this.der) { // Tecla D para mover derecha
+    	    		   mago.moverDerecha();
+    	    		   seMueve = true;
+    	    	   }
+    	    	   
+    	    	   // Dibuja el mago una sola vez con su dirección actual
+    	    	   mago.dibujar(entorno);
+
+    	    	   //TIMERS
+    	    	   if (cooldown > 0) 
+    	    		   cooldown--;
+    	       
+    	    	   if (ticksRonda >0 && ronda <10){
+    	    		   ticksRonda--;
+    	    		   entorno.cambiarFont("Gabriola", 40, Color.RED);
+    	    		   entorno.escribirTexto("Preparate para los enemigos", 250,150);
+    	    	   	} else if(ticksRonda>0 && ronda == 10) {
+    	    	   		ticksRonda--;
+    	    	   		entorno.cambiarFont("Gabriola", 40, Color.RED);
+    	    	   		entorno.escribirTexto("Preparate para la ultima ronda", 250,150);
+    	    	   	}
     	       
     	       
-    	       // Dibuja y mueve el murciélago
-    	       if(ronda <= 6 && ticksRonda == 0)  // condicion para el respawn de los murcielagos
-    	       		{for (int i = 0; i < murcielagos.length; i++) { 
-    	       			Murcielago m = murcielagos[i];
+    	    	   // Dibuja y mueve el murciélago
+    	    	   if(ronda <= 11 && ticksRonda == 0 && juegoEnPausa == false)  // condicion para el respawn de los murcielagos
+    	       			{for (int i = 0; i < murcielagos.length; i++) { 
+    	       				Murcielago m = murcielagos[i];
     	            
-    	       			if (m == null) {
-	    	            	
-	    	            	  	            		
+    	       				if (m == null) {
+	    	            	   	  	            		
 	    	            		murcielagos[i] = new Murcielago(100, 50);
 	    	            		murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 50);
 	    	            		contMur++;
-    	                    
-	    	            		
-	    	            	continue; // Si el murciélago es null, salta a la siguiente iteración
+	    	            		continue; // Si el murciélago es null, salta a la siguiente iteración
+    	       				}
+    	            
+    	       				m.moverHacia(mago, murcielagos, i);
+    	            
+    	       				// Verificar colisión con el mago
+    	       				if (colisionMagoMurcielago(mago, murcielagos[i]) && cooldown == 0) {
+    	       					
+    	       					if(menuRecompensa.rDurabilidad == false) 
+    	       						{mago.recibirDanio(20);
+    	       					}else {mago.recibirDanio(10);}
+    	       					
+    	       					cooldown = 60; // tick para recibir daño devuelta
+    	       					eliminarMurcielago(i);  	       				
+    	       					continue; // Salir del bucle para evitar dibujar el murciélago eliminado
+    	       				}
+    	            
+    	       				murcielagos[i].dibujar(entorno);
     	       			}
-    	            
-    	       			m.moverHacia(mago, murcielagos, i);
-    	            
-    	       			// Verificar colisión con el mago
-    	       			if (colisionMagoMurcielago(mago, murcielagos[i]) && cooldown == 0) {
-    	       				mago.recibirDanio(15);
-    	       				cooldown = 60; // tick para recibir daño devuelta
-    	       				eliminarMurcielago(i);  	       				
-    	       				continue; // Salir del bucle para evitar dibujar el murciélago eliminado
-    	       			}
-    	            
-    	       			murcielagos[i].dibujar(entorno);
-    	            }
-    	        } 
+    	       		} 
+    	       }
+    	       
     	       //Asigna el booleano para las colisiones
     	       this.arr = false;
     	       this.izq = false;
@@ -208,8 +243,22 @@ public class Juego extends InterfaceJuego {
     	       this.aba = false;
     	       
     	       
-               }   
-    	   if (ronda == 6 && mago.estaVivo() && !juegoTerminado ) {
+               }
+    	   
+    	   
+    	   
+    	   //MENU DE RECOMPENSA
+//    	   if(recompensa == false && mago.estaVivo() && !juegoTerminado) {
+//    		 	juegoEnPausa = true;
+//    		 	entorno.cambiarFont(null, 40, Color.RED);
+//   	   			entorno.escribirTexto("ESTAS A LA MITAD DE TU CAMINO", 250,150);
+//   	   			juegoEnPausa = false;
+//   	   			recompensa = true;
+//   	   			ticksRonda = 100;
+//    	   }
+    	   
+    	   //MENU DE VICTORIA
+    	   if (ronda > 10 && mago.estaVivo() && !juegoTerminado ) {
     		   			win =true;		
     		   			menuVictoria.dibujar(entorno);    
     		   			if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
@@ -336,13 +385,14 @@ public class Juego extends InterfaceJuego {
         killsEnEstaRonda = 0;
         killsPorRonda = 10;
         ronda = 1;
-
-        // Regenerar todos los murciélagos
+        recompensa = false; 
+        menuRecompensa.reiniciarEstado();
+        
+        // Reset murciélagos
         for (int i = 0; i < murcielagos.length; i++) {
             murcielagos[i] = new Murcielago(100, 50);
             murcielagos[i].generarPosicionSinSuperposicion(murcielagos, i, 75);
         }
-        
         menuVictoria.deseleccionar();
         contMur = murcielagos.length;
     }

@@ -51,6 +51,7 @@ public class Mago {
     	this.bordInf = this.y + this.alto / 3.5;
     }
     
+    
     public void moverIzquierda() {
         this.x -= velocidad;
         this.direccionActual = "izquierda";
@@ -83,6 +84,8 @@ public class Mago {
         this.direccionActual = direccion;
     }
 
+    
+    
     public void dibujar(Entorno entorno) {
         // Dibujar el mago
         if (direccionActual.equals("abajo")) {
@@ -152,4 +155,18 @@ public class Mago {
     public double getManaActual() { return manaActual; }
     public double getManaMaximo() { return manaMaximo; }
 		
-	}
+    // Setters para vida, mana y velocidad
+    public void setVidaMaxima() {
+        this.vidaMaxima = 200;
+        this.vidaActual = this.vidaMaxima; // Update current vida to the new maximum
+    }
+
+    public void setManaMaxima() {
+        this.manaMaximo = 200;
+        this.manaActual = this.manaMaximo; // Update current mana to the new maximum
+    }
+
+    public void setVelocidadMaxima() {
+        this.velocidad = 1;
+    }
+}

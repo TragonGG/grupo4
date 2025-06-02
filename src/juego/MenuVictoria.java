@@ -74,7 +74,7 @@ public class MenuVictoria {
     }
 
     public void verificarClick(int mouseX, int mouseY) {
-        // Verificar si se hizo clic en "Volver a jugar o Salir"
+        // Verificar si se hizo clic en "Volver a jugar"
         // Definimos un margen de área clickeable alrededor del botón
         double margenX = 100;
         double margenY = 25;
