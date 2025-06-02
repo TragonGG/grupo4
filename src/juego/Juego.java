@@ -51,7 +51,7 @@ public class Juego extends InterfaceJuego {
         this.cooldown = 0;
         this.ticksRonda = 100;
         
-        this.ronda = 5;
+        this.ronda = 1;
         this.killsPorRonda = 10;
         this.killsEnEstaRonda = 0;
       
