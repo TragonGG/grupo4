@@ -72,7 +72,7 @@ public class Hechizo {
             return false;
         }
         
-        // Lógica específica según el tipo de hechizo
+     // Aplica el efecto específico según el tipo de hechizo
         switch (tipo) {
             case APOCALIPSIS:
                 System.out.println("¡APOCALIPSIS DESATADO! Daño masivo en área");
@@ -93,15 +93,15 @@ public class Hechizo {
                 break;
         }
         
-        return true; // Hechizo ejecutado exitosamente
+        return true; 
     }
-    
+    //Elimina todos los murciélagos que estén dentro del área de efecto del hechizo.
+    //Solo se usa para hechizos ofensivos (APOCALIPSIS y MISIL_MAGICO)
+
     private void eliminarMurcielagosEnArea(double centroX, double centroY, Murcielago[] murcielagos, Juego juego) {
         for (int i = 0; i < murcielagos.length; i++) {
             if (murcielagos[i] != null) {
-                double distancia = calcularDistancia(centroX, centroY, murcielagos[i].x, murcielagos[i].y);
-                
-                if (distancia <= radioEfecto) {
+            	if (estaEnRango(centroX, centroY, murcielagos[i].x, murcielagos[i].y)) {
                     System.out.println("¡Murciélago eliminado por " + nombre + "!");
                     juego.eliminarMurcielagoPublico(i);
                 }
@@ -109,10 +109,12 @@ public class Hechizo {
         }
     }
     
-    private double calcularDistancia(double x1, double y1, double x2, double y2) {
-        double dx = x2 - x1;
-        double dy = y2 - y1;
-        return Math.sqrt(dx * dx + dy * dy);
+    //Verifica si un punto está dentro del área rectangular de efecto del hechizo
+    private boolean estaEnRango(double centroX, double centroY, double targetX, double targetY) {
+        double deltaX = Math.abs(targetX - centroX);
+        double deltaY = Math.abs(targetY - centroY);
+        
+        return deltaX <= radioEfecto && deltaY <= radioEfecto;
     }
     
     private void iniciarEfecto(double x, double y, int duracion) {
@@ -137,18 +139,52 @@ public class Hechizo {
         }
     }
     
-    // Getters y setters
-    public boolean estaSeleccionado() { return seleccionado; }
-    public void setSeleccionado(boolean seleccionado) { this.seleccionado = seleccionado; }
-    public String getNombre() { return nombre; }
-    public double getCostoMana() { return costoMana; }
-    public double getX() { return x; }
-    public double getY() { return y; }
-    public double getAncho() { return ancho; }
-    public double getAlto() { return alto; }
-    public TipoHechizo getTipo() { return tipo; }
-    public boolean estaEjecutandose() { return mostrandoEfecto; }
-    public double getRadioEfecto() { return radioEfecto; }
+    
+    //para mandarselo a otras clases
+   
+    public boolean estaSeleccionado() { 
+    	return seleccionado; 
+    	}
+    
+    public void setSeleccionado(boolean seleccionado) {
+    	this.seleccionado = seleccionado; 
+    	}
+    
+    public String getNombre() {
+    	return nombre; 
+    	}
+    
+    public double getCostoMana() {
+    	return costoMana; 
+    	}
+    
+    public double getX() {
+    	return x; }
+    
+    public double getY() {
+    	return y; 
+        }
+    
+    public double getAncho() {
+    	return ancho; 
+    	}
+    
+    public double getAlto() {
+    	return alto; 
+    	}
+    
+    public TipoHechizo getTipo() {
+    	return tipo; 
+    	}
+    
+    public boolean estaEjecutandose() {
+    	return mostrandoEfecto; 
+    	}
+    
+    public double getRadioEfecto() {
+    	return radioEfecto; 
+    	}
+    
     
     public boolean contienePunto(double mouseX, double mouseY) {
         return mouseX >= (x - ancho/2) && mouseX <= (x + ancho/2) &&
