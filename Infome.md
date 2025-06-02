@@ -1,3 +1,5 @@
+//COMENTARIO: Este es el mismo informe que en https://docs.google.com/document/d/18Y7E_6HEi1srjt_WVKj8Ow6lGlJU_O5aZ6e2rlFdEGw/edit?usp=sharing
+
 En este informe mostraremos el desarrollo de nuestro proyecto llamado “El camino de Gondolf”, un videojuego que trata de sobrevivir, a base de rondas, oleadas de murciélagos, donde si tocan a tu personaje estos mismos te quitarán vida e intentan matarte con el 
 fin de terminar el juego. El objetivo del juego es poder derrotar a todos los enemigos que te encuentres en tu camino y poder sobrevivir. Para ello, insertamos distintas mecánicas como el sistema de rondas, vida y mana, y un menú para que el jugador pueda ver sus 
 estadísticas utilizando la biblioteca Entorno en Java. Este informe describe el proceso de desarrollo, las decisiones tomadas, los desafíos encontrados y las funcionalidades implementadas.
